@@ -1346,7 +1346,7 @@
                                     <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${tip.content}</p>
                                     <div style="display: flex; gap: 8px;">
                                         <a href="https://www.douyin.com/search/${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 抖音</a>
-                                        <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书</a>
+                                        <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书</a>
                                         <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-bilibili">📺 B站</a>
                                     </div>
                                 </div>
@@ -1379,95 +1379,166 @@
         }
 
         // ==================== 小说拆解模块 ====================
-        const jjwxcRankingSets = [
-            [
-                { rank: 1, title: '长月烬明', author: '藤萝为枝', type: '古言仙侠', tags: ['仙侠', '虐恋', 'HE'], status: '连载中', popularity: '1500万', link: 'https://www.jjwxc.net/onebook.php?novelid=4496403' },
-                { rank: 2, title: '错撩', author: '翘摇', type: '现代言情', tags: ['豪门', '甜宠', '先婚后爱'], status: '已完结', popularity: '1200万', link: 'https://www.jjwxc.net/onebook.php?novelid=4071306' },
-                { rank: 3, title: '偷偷藏不住', author: '竹已', type: '现代言情', tags: ['校园', '暗恋', '甜宠'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=3624305' },
-                { rank: 4, title: '白日梦我', author: '栖见', type: '现代言情', tags: ['校园', '青春', '治愈'], status: '已完结', popularity: '900万', link: 'https://www.jjwxc.net/onebook.php?novelid=3453198' },
-                { rank: 5, title: '当我飞奔向你', author: '竹已', type: '现代言情', tags: ['校园', '甜宠', '青梅竹马'], status: '已完结', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=3588905' },
-                { rank: 6, title: '折月亮', author: '竹已', type: '现代言情', tags: ['都市', '治愈', '成长'], status: '连载中', popularity: '700万', link: 'https://www.jjwxc.net/onebook.php?novelid=4256666' },
-                { rank: 7, title: '神明今夜想你', author: '藤萝为枝', type: '现代言情', tags: ['治愈', '救赎', '甜宠'], status: '已完结', popularity: '650万', link: 'https://www.jjwxc.net/onebook.php?novelid=3775728' },
-                { rank: 8, title: '偏偏宠爱', author: '藤萝为枝', type: '现代言情', tags: ['校园', '重生', '甜宠'], status: '已完结', popularity: '600万', link: 'https://www.jjwxc.net/onebook.php?novelid=3250045' },
-                { rank: 9, title: '深渊女神', author: '藤萝为枝', type: '现代言情', tags: ['悬疑', '治愈', '甜宠'], status: '已完结', popularity: '550万', link: 'https://www.jjwxc.net/onebook.php?novelid=3343640' },
-                { rank: 10, title: '告白', author: '应橙', type: '现代言情', tags: ['都市', '暗恋', '治愈'], status: '连载中', popularity: '500万', link: 'https://www.jjwxc.net/onebook.php?novelid=4327836' }
-            ],
-            [
-                { rank: 1, title: '难哄', author: '竹已', type: '现代言情', tags: ['都市', '治愈', '破镜重圆'], status: '已完结', popularity: '1800万', link: 'https://www.jjwxc.net/onebook.php?novelid=4205000' },
-                { rank: 2, title: '宁安如梦', author: '时镜', type: '古言重生', tags: ['重生', '宫斗', '权谋'], status: '已完结', popularity: '1300万', link: 'https://www.jjwxc.net/onebook.php?novelid=3954300' },
-                { rank: 3, title: '赴京', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '连载中', popularity: '1100万', link: 'https://www.jjwxc.net/onebook.php?novelid=4500000' },
-                { rank: 4, title: '重生之将门毒后', author: '千山茶客', type: '古言重生', tags: ['重生', '宅斗', '权谋'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=2632856' },
-                { rank: 5, title: '嫡谋', author: '面北眉南', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '950万', link: 'https://www.jjwxc.net/onebook.php?novelid=2200375' },
-                { rank: 6, title: '锦桐', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '850万', link: 'https://www.jjwxc.net/onebook.php?novelid=2732372' },
-                { rank: 7, title: '掌中之物', author: '贝昕', type: '现代言情', tags: ['悬疑', '虐恋', '复仇'], status: '已完结', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=2515144' },
-                { rank: 8, title: '星落凝成糖', author: '一度君华', type: '古言仙侠', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '750万', link: 'https://www.jjwxc.net/onebook.php?novelid=3000000' },
-                { rank: 9, title: '惜花芷', author: '空留', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '连载中', popularity: '700万', link: 'https://www.jjwxc.net/onebook.php?novelid=4400000' },
-                { rank: 10, title: '玉茗茶骨', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '连载中', popularity: '650万', link: 'https://www.jjwxc.net/onebook.php?novelid=4450000' }
-            ],
-            [
-                { rank: 1, title: '一念关山', author: '沐非', type: '古言武侠', tags: ['武侠', '权谋', '强强'], status: '连载中', popularity: '1600万', link: 'https://www.jjwxc.net/onebook.php?novelid=4380000' },
-                { rank: 2, title: '九重紫', author: '吱吱', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '1400万', link: 'https://www.jjwxc.net/onebook.php?novelid=3400000' },
-                { rank: 3, title: '花琉璃轶闻', author: '月下蝶影', type: '古言甜宠', tags: ['古言', '甜宠', '宫斗'], status: '已完结', popularity: '1100万', link: 'https://www.jjwxc.net/onebook.php?novelid=3500000' },
-                { rank: 4, title: '长相思', author: '桐华', type: '古言仙侠', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=3200000' },
-                { rank: 5, title: '步步惊心', author: '桐华', type: '古言穿越', tags: ['穿越', '宫斗', '虐恋'], status: '已完结', popularity: '900万', link: 'https://www.jjwxc.net/onebook.php?novelid=1000000' },
-                { rank: 6, title: '庶女有毒', author: '秦简', type: '古言宅斗', tags: ['宅斗', '重生', '复仇'], status: '已完结', popularity: '850万', link: 'https://www.jjwxc.net/onebook.php?novelid=1800000' },
-                { rank: 7, title: '凤囚凰', author: '天衣有风', type: '古言穿越', tags: ['穿越', '权谋', '虐恋'], status: '已完结', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=1500000' },
-                { rank: 8, title: '东宫', author: '匪我思存', type: '古言虐恋', tags: ['古言', '虐恋', '悲剧'], status: '已完结', popularity: '750万', link: 'https://www.jjwxc.net/onebook.php?novelid=1200000' },
-                { rank: 9, title: '琉璃美人煞', author: '十四郎', type: '古言仙侠', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '700万', link: 'https://www.jjwxc.net/onebook.php?novelid=800000' },
-                { rank: 10, title: '三生三世十里桃花', author: '唐七', type: '古言仙侠', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '650万', link: 'https://www.jjwxc.net/onebook.php?novelid=600000' }
-            ],
-            [
-                { rank: 1, title: '狂飙', author: '徐纪周', type: '现代悬疑', tags: ['悬疑', '刑侦', '扫黑'], status: '已完结', popularity: '2000万', link: 'https://www.jjwxc.net/onebook.php?novelid=4480000' },
-                { rank: 2, title: '琅琊榜', author: '海宴', type: '古言权谋', tags: ['权谋', '复仇', '友情'], status: '已完结', popularity: '1500万', link: 'https://www.jjwxc.net/onebook.php?novelid=500000' },
-                { rank: 3, title: '伪装者', author: '张勇', type: '民国谍战', tags: ['谍战', '悬疑', '家庭'], status: '已完结', popularity: '1300万', link: 'https://www.jjwxc.net/onebook.php?novelid=700000' },
-                { rank: 4, title: '庆余年', author: '猫腻', type: '玄幻穿越', tags: ['穿越', '权谋', '玄幻'], status: '连载中', popularity: '1200万', link: 'https://www.jjwxc.net/onebook.php?novelid=400000' },
-                { rank: 5, title: '雪中悍刀行', author: '烽火戏诸侯', type: '玄幻武侠', tags: ['武侠', '玄幻', '江湖'], status: '已完结', popularity: '1100万', link: 'https://www.jjwxc.net/onebook.php?novelid=300000' },
-                { rank: 6, title: '凡人修仙传', author: '忘语', type: '玄幻修真', tags: ['修真', '升级', '玄幻'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=200000' },
-                { rank: 7, title: '斗破苍穹', author: '天蚕土豆', type: '玄幻升级', tags: ['升级', '玄幻', '热血'], status: '已完结', popularity: '950万', link: 'https://www.jjwxc.net/onebook.php?novelid=180000' },
-                { rank: 8, title: '斗罗大陆', author: '唐家三少', type: '玄幻奇幻', tags: ['奇幻', '升级', '热血'], status: '已完结', popularity: '900万', link: 'https://www.jjwxc.net/onebook.php?novelid=150000' },
-                { rank: 9, title: '全职高手', author: '蝴蝶蓝', type: '游戏竞技', tags: ['游戏', '竞技', '热血'], status: '已完结', popularity: '850万', link: 'https://www.jjwxc.net/onebook.php?novelid=120000' },
-                { rank: 10, title: '盗墓笔记', author: '南派三叔', type: '悬疑探险', tags: ['悬疑', '探险', '盗墓'], status: '已完结', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=100000' }
-            ],
-            [
-                { rank: 1, title: '似锦', author: '冬天的柳叶', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1400万', link: 'https://www.jjwxc.net/onebook.php?novelid=3100000' },
-                { rank: 2, title: '嫡女谋', author: '面北眉南', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '1200万', link: 'https://www.jjwxc.net/onebook.php?novelid=2400000' },
-                { rank: 3, title: '闺宁', author: '意迟迟', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1100万', link: 'https://www.jjwxc.net/onebook.php?novelid=2800000' },
-                { rank: 4, title: '嫡谋', author: '面北眉南', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=2200375' },
-                { rank: 5, title: '金陵春', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '950万', link: 'https://www.jjwxc.net/onebook.php?novelid=2600000' },
-                { rank: 6, title: '花开锦绣', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '900万', link: 'https://www.jjwxc.net/onebook.php?novelid=2500000' },
-                { rank: 7, title: '锦桐', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '850万', link: 'https://www.jjwxc.net/onebook.php?novelid=2732372' },
-                { rank: 8, title: '嫡长女她又美又飒', author: '千苒君笑', type: '古言宅斗', tags: ['宅斗', '重生', '爽文'], status: '连载中', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=4350000' },
-                { rank: 9, title: '重生之温婉', author: '六月浩雪', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '750万', link: 'https://www.jjwxc.net/onebook.php?novelid=2000000' },
-                { rank: 10, title: '继妹难为', author: '六月浩雪', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '700万', link: 'https://www.jjwxc.net/onebook.php?novelid=2100000' }
-            ]
-        ];
+        const jjwxcCategoryRankings = {
+            modern: {
+                name: '现代言情',
+                icon: '💖',
+                color: '#FF6B9D',
+                link: 'https://m.jjwxc.net/ranklist?type=3',
+                books: [
+                    { rank: 1, title: '错撩', author: '翘摇', tags: ['豪门', '甜宠', '先婚后爱'], status: '已完结', popularity: '1200万', link: 'https://m.jjwxc.net/book/4071306' },
+                    { rank: 2, title: '偷偷藏不住', author: '竹已', tags: ['校园', '暗恋', '甜宠'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.net/book/3624305' },
+                    { rank: 3, title: '白日梦我', author: '栖见', tags: ['校园', '青春', '治愈'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.net/book/3453198' },
+                    { rank: 4, title: '难哄', author: '竹已', tags: ['都市', '治愈', '破镜重圆'], status: '已完结', popularity: '1800万', link: 'https://m.jjwxc.net/book/4205000' },
+                    { rank: 5, title: '当我飞奔向你', author: '竹已', tags: ['校园', '甜宠', '青梅竹马'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/3588905' },
+                    { rank: 6, title: '折月亮', author: '竹已', tags: ['都市', '治愈', '成长'], status: '连载中', popularity: '700万', link: 'https://m.jjwxc.net/book/4256666' },
+                    { rank: 7, title: '偏偏宠爱', author: '藤萝为枝', tags: ['校园', '重生', '甜宠'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.net/book/3250045' },
+                    { rank: 8, title: '告白', author: '应橙', tags: ['都市', '暗恋', '治愈'], status: '连载中', popularity: '500万', link: 'https://m.jjwxc.net/book/4327836' },
+                    { rank: 9, title: '一万次心动', author: '一路烦花', tags: ['豪门', '甜宠', '强强'], status: '已完结', popularity: '950万', link: 'https://m.jjwxc.net/book/3000000' },
+                    { rank: 10, title: '夫人你马甲又掉了', author: '一路烦花', tags: ['都市', '甜宠', '马甲'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/3100000' }
+                ]
+            },
+            ancient: {
+                name: '古言宅斗',
+                icon: '🏮',
+                color: '#FFB347',
+                link: 'https://m.jjwxc.net/ranklist?type=2',
+                books: [
+                    { rank: 1, title: '重生之将门毒后', author: '千山茶客', tags: ['重生', '宅斗', '权谋'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.net/book/2632856' },
+                    { rank: 2, title: '嫡谋', author: '面北眉南', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '950万', link: 'https://m.jjwxc.net/book/2200375' },
+                    { rank: 3, title: '宁安如梦', author: '时镜', tags: ['重生', '宫斗', '权谋'], status: '已完结', popularity: '1300万', link: 'https://m.jjwxc.net/book/3954300' },
+                    { rank: 4, title: '似锦', author: '冬天的柳叶', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1400万', link: 'https://m.jjwxc.net/book/3100000' },
+                    { rank: 5, title: '九重紫', author: '吱吱', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '1400万', link: 'https://m.jjwxc.net/book/3400000' },
+                    { rank: 6, title: '惜花芷', author: '空留', tags: ['宅斗', '重生', '权谋'], status: '连载中', popularity: '700万', link: 'https://m.jjwxc.net/book/4400000' },
+                    { rank: 7, title: '赴京', author: '闲听落花', tags: ['宅斗', '重生', '甜宠'], status: '连载中', popularity: '1100万', link: 'https://m.jjwxc.net/book/4500000' },
+                    { rank: 8, title: '锦桐', author: '闲听落花', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/2732372' },
+                    { rank: 9, title: '闺宁', author: '意迟迟', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1100万', link: 'https://m.jjwxc.net/book/2800000' },
+                    { rank: 10, title: '嫡长女她又美又飒', author: '千苒君笑', tags: ['宅斗', '重生', '爽文'], status: '连载中', popularity: '800万', link: 'https://m.jjwxc.net/book/4350000' }
+                ]
+            },
+            xianxia: {
+                name: '仙侠奇缘',
+                icon: '✨',
+                color: '#9B59B6',
+                link: 'https://m.jjwxc.net/ranklist?type=11',
+                books: [
+                    { rank: 1, title: '长月烬明', author: '藤萝为枝', tags: ['仙侠', '虐恋', 'HE'], status: '连载中', popularity: '1500万', link: 'https://m.jjwxc.net/book/4496403' },
+                    { rank: 2, title: '长相思', author: '桐华', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.net/book/3200000' },
+                    { rank: 3, title: '三生三世十里桃花', author: '唐七', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '650万', link: 'https://m.jjwxc.net/book/600000' },
+                    { rank: 4, title: '琉璃美人煞', author: '十四郎', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '700万', link: 'https://m.jjwxc.net/book/800000' },
+                    { rank: 5, title: '星落凝成糖', author: '一度君华', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '750万', link: 'https://m.jjwxc.net/book/3000000' },
+                    { rank: 6, title: '落花时节又逢君', author: '蜀客', tags: ['仙侠', '虐恋', '重生'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.net/book/1000000' },
+                    { rank: 7, title: '沉香如屑', author: '苏寞', tags: ['仙侠', '虐恋', 'HE'], status: '已完结', popularity: '550万', link: 'https://m.jjwxc.net/book/1200000' },
+                    { rank: 8, title: '千古玦尘', author: '星零', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '500万', link: 'https://m.jjwxc.net/book/1500000' },
+                    { rank: 9, title: '护心', author: '九鹭非香', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '450万', link: 'https://m.jjwxc.net/book/1800000' },
+                    { rank: 10, title: '驭鲛记', author: '九鹭非香', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '400万', link: 'https://m.jjwxc.net/book/2000000' }
+                ]
+            },
+            mystery: {
+                name: '悬疑推理',
+                icon: '🔍',
+                color: '#3498DB',
+                link: 'https://m.jjwxc.net/ranklist?type=18',
+                books: [
+                    { rank: 1, title: '掌中之物', author: '贝昕', tags: ['悬疑', '虐恋', '复仇'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/2515144' },
+                    { rank: 2, title: '狂飙', author: '徐纪周', tags: ['悬疑', '刑侦', '扫黑'], status: '已完结', popularity: '2000万', link: 'https://m.jjwxc.net/book/4480000' },
+                    { rank: 3, title: '默读', author: 'Priest', tags: ['悬疑', '刑侦', '耽美'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.net/book/2800000' },
+                    { rank: 4, title: '破云', author: '淮上', tags: ['悬疑', '刑侦', '耽美'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/3000000' },
+                    { rank: 5, title: '吞海', author: '淮上', tags: ['悬疑', '刑侦', '耽美'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/3200000' },
+                    { rank: 6, title: 'SCI谜案集', author: '耳雅', tags: ['悬疑', '探案', '耽美'], status: '连载中', popularity: '700万', link: 'https://m.jjwxc.net/book/1500000' },
+                    { rank: 7, title: '犯罪心理', author: '长洱', tags: ['悬疑', '心理', '耽美'], status: '已完结', popularity: '650万', link: 'https://m.jjwxc.net/book/2000000' },
+                    { rank: 8, title: '死亡通知单', author: '周浩晖', tags: ['悬疑', '推理', '犯罪'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.net/book/2200000' },
+                    { rank: 9, title: '十宗罪', author: '蜘蛛', tags: ['悬疑', '犯罪', '惊悚'], status: '已完结', popularity: '550万', link: 'https://m.jjwxc.net/book/2400000' },
+                    { rank: 10, title: '法医秦明', author: '秦明', tags: ['悬疑', '法医', '推理'], status: '已完结', popularity: '500万', link: 'https://m.jjwxc.net/book/2600000' }
+                ]
+            },
+            martial: {
+                name: '武侠江湖',
+                icon: '🗡️',
+                color: '#2ECC71',
+                link: 'https://m.jjwxc.net/ranklist?type=6',
+                books: [
+                    { rank: 1, title: '一念关山', author: '沐非', tags: ['武侠', '权谋', '强强'], status: '连载中', popularity: '1600万', link: 'https://m.jjwxc.net/book/4380000' },
+                    { rank: 2, title: '琅琊榜', author: '海宴', tags: ['权谋', '复仇', '友情'], status: '已完结', popularity: '1500万', link: 'https://m.jjwxc.net/book/500000' },
+                    { rank: 3, title: '雪中悍刀行', author: '烽火戏诸侯', tags: ['武侠', '玄幻', '江湖'], status: '已完结', popularity: '1100万', link: 'https://m.jjwxc.net/book/300000' },
+                    { rank: 4, title: '庆余年', author: '猫腻', tags: ['穿越', '权谋', '玄幻'], status: '连载中', popularity: '1200万', link: 'https://m.jjwxc.net/book/400000' },
+                    { rank: 5, title: '将夜', author: '猫腻', tags: ['玄幻', '武侠', '升级'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/600000' },
+                    { rank: 6, title: '择天记', author: '猫腻', tags: ['玄幻', '武侠', '升级'], status: '已完结', popularity: '700万', link: 'https://m.jjwxc.net/book/800000' },
+                    { rank: 7, title: '凡人修仙传', author: '忘语', tags: ['修真', '升级', '玄幻'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.net/book/200000' },
+                    { rank: 8, title: '斗破苍穹', author: '天蚕土豆', tags: ['升级', '玄幻', '热血'], status: '已完结', popularity: '950万', link: 'https://m.jjwxc.net/book/180000' },
+                    { rank: 9, title: '斗罗大陆', author: '唐家三少', tags: ['奇幻', '升级', '热血'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.net/book/150000' },
+                    { rank: 10, title: '全职高手', author: '蝴蝶蓝', tags: ['游戏', '竞技', '热血'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/120000' }
+                ]
+            },
+            ancient_cross: {
+                name: '古言穿越',
+                icon: '⏳',
+                color: '#E67E22',
+                link: 'https://m.jjwxc.net/ranklist?type=17',
+                books: [
+                    { rank: 1, title: '步步惊心', author: '桐华', tags: ['穿越', '宫斗', '虐恋'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.net/book/1000000' },
+                    { rank: 2, title: '凤囚凰', author: '天衣有风', tags: ['穿越', '权谋', '虐恋'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/1500000' },
+                    { rank: 3, title: '庶女有毒', author: '秦简', tags: ['宅斗', '重生', '复仇'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/1800000' },
+                    { rank: 4, title: '东宫', author: '匪我思存', tags: ['古言', '虐恋', '悲剧'], status: '已完结', popularity: '750万', link: 'https://m.jjwxc.net/book/1200000' },
+                    { rank: 5, title: '花琉璃轶闻', author: '月下蝶影', tags: ['古言', '甜宠', '宫斗'], status: '已完结', popularity: '1100万', link: 'https://m.jjwxc.net/book/3500000' },
+                    { rank: 6, title: '楚乔传', author: '潇湘冬儿', tags: ['穿越', '权谋', '强强'], status: '已完结', popularity: '700万', link: 'https://m.jjwxc.net/book/2000000' },
+                    { rank: 7, title: '锦绣未央', author: '秦简', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '650万', link: 'https://m.jjwxc.net/book/2200000' },
+                    { rank: 8, title: '宫锁心玉', author: '于正', tags: ['穿越', '宫斗', '甜宠'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.net/book/2400000' },
+                    { rank: 9, title: '寻找前世之旅', author: 'vivibear', tags: ['穿越', '奇幻', '言情'], status: '已完结', popularity: '550万', link: 'https://m.jjwxc.net/book/2600000' },
+                    { rank: 10, title: '绾青丝', author: '波波', tags: ['穿越', '古风', '言情'], status: '已完结', popularity: '500万', link: 'https://m.jjwxc.net/book/2800000' }
+                ]
+            }
+        };
+
+        const jjwxcCategoryKeys = ['modern', 'ancient', 'xianxia', 'mystery', 'martial', 'ancient_cross'];
+
+        let currentNovelCategory = null;
 
         function getDailyJjwxcRanking() {
-            return jjwxcRankingSets[getDailyIndex(jjwxcRankingSets)];
+            if (currentNovelCategory) {
+                return jjwxcCategoryRankings[currentNovelCategory];
+            }
+            const categoryKey = jjwxcCategoryKeys[getDailyIndex(jjwxcCategoryKeys)];
+            return jjwxcCategoryRankings[categoryKey];
+        }
+
+        function switchNovelCategory(categoryKey) {
+            currentNovelCategory = categoryKey;
+            renderNovelPage();
+        }
+
+        function searchJjwxc() {
+            const keyword = document.getElementById('novel-search-input').value.trim();
+            if (keyword) {
+                window.open(`https://m.jjwxc.net/search?keyword=${keyword}`, '_blank');
+            }
         }
 
         function getDailyNovelTask() {
             const ranking = getDailyJjwxcRanking();
+            const books = ranking.books;
             const today = new Date().toDateString();
             const lastDate = getStore('novel_task_date', '');
             
             if (lastDate !== today) {
                 const tasks = [
-                    `拆解《${ranking[0].title}》文案前三章`,
-                    `分析《${ranking[1].title}》人物设定`,
-                    `研究《${ranking[2].title}》开篇钩子`,
-                    `分析《${ranking[3].title}》节奏把控`,
-                    `拆解《${ranking[4].title}》情感线`,
-                    `研究《${ranking[5].title}》写作手法`,
-                    `分析《${ranking[6].title}》主题表达`,
-                    `拆解《${ranking[7].title}》情节设计`
+                    `拆解《${books[0].title}》文案前三章`,
+                    `分析《${books[1].title}》人物设定`,
+                    `研究《${books[2].title}》开篇钩子`,
+                    `分析《${books[3].title}》节奏把控`,
+                    `拆解《${books[4].title}》情感线`,
+                    `研究《${books[5].title}》写作手法`,
+                    `分析《${books[6].title}》主题表达`,
+                    `拆解《${books[7].title}》情节设计`,
+                    `研究${ranking.icon}${ranking.name}分类写作技巧`,
+                    `分析《${books[0].title}》与《${books[1].title}》对比`
                 ];
                 const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
                 setStore('novel_task', randomTask);
                 setStore('novel_task_date', today);
                 return randomTask;
             }
-            return getStore('novel_task', `拆解《${ranking[0].title}》文案前三章`);
+            return getStore('novel_task', `拆解《${books[0].title}》文案前三章`);
         }
 
         function getNovelNotes() {
@@ -1533,26 +1604,47 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">🏆 晋江金榜实时榜单</h3>
-                        <a href="https://www.jjwxc.net/ranklist/top100.html" target="_blank" class="btn btn-sm btn-jjwxc">查看官网实时榜单</a>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <h3 class="card-title">🏆 晋江${getDailyJjwxcRanking().icon}${getDailyJjwxcRanking().name}实时榜单</h3>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <a href="${getDailyJjwxcRanking().link}" target="_blank" class="btn btn-sm btn-jjwxc">查看官网榜单</a>
+                            <button class="btn btn-sm btn-secondary" onclick="refreshDailyContent()">🔄 刷新内容</button>
+                        </div>
+                    </div>
+                    <div style="padding: 16px; background: rgba(230,213,195,0.05); border-radius: 8px; margin-bottom: 16px;">
+                        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+                            <input type="text" id="novel-search-input" placeholder="搜索晋江小说..." style="flex: 1; padding: 10px; border: 1px solid #e6d5c3; border-radius: 8px; font-size: 13px;" onkeypress="if(event.key === 'Enter') searchJjwxc()">
+                            <button class="btn btn-sm btn-primary" onclick="searchJjwxc()">🔍 搜索</button>
+                        </div>
+                        <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">📚 选择分类查看更多榜单：</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            ${(() => {
+                                const activeKey = currentNovelCategory || jjwxcCategoryKeys[getDailyIndex(jjwxcCategoryKeys)];
+                                return jjwxcCategoryKeys.map(key => {
+                                    const cat = jjwxcCategoryRankings[key];
+                                    const isActive = key === activeKey;
+                                    return `<button class="btn btn-sm" onclick="switchNovelCategory('${key}')" style="background: ${isActive ? cat.color : 'transparent'}; color: ${isActive ? '#fff' : cat.color}; border-color: ${cat.color}; padding: 6px 12px;">${cat.icon} ${cat.name}</button>`;
+                                }).join('');
+                            })()}
+                        </div>
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
-                        ${getDailyJjwxcRanking().map(item => `
-                            <div class="ranking-item" onclick="window.open('${item.link}', '_blank')">
+                        ${getDailyJjwxcRanking().books.map(item => `
+                            <div class="ranking-item" onclick="window.open('${item.link}', '_blank')" style="border-left: 4px solid ${item.rank === 1 ? '#FFD700' : item.rank === 2 ? '#C0C0C0' : item.rank === 3 ? '#CD7F32' : getDailyJjwxcRanking().color};">
                                 <span class="rank-badge ${item.rank === 1 ? 'gold' : item.rank === 2 ? 'silver' : item.rank === 3 ? 'bronze' : ''}">${item.rank}</span>
                                 <div class="ranking-info">
                                     <div class="ranking-title">${item.title}</div>
                                     <div class="ranking-meta">
                                         <span style="margin-right: 12px;">${item.author}</span>
-                                        <span style="margin-right: 12px;">${item.type}</span>
                                         <span style="color: ${item.status === '连载中' ? 'var(--warning)' : 'var(--success)'};">${item.status}</span>
                                     </div>
                                     <div style="margin-top: 6px;">
-                                        ${item.tags.map(tag => `<span class="tag priority-medium">${tag}</span>`).join('')}
+                                        ${item.tags.map(tag => `<span class="tag" style="background: ${getDailyJjwxcRanking().color}20; color: ${getDailyJjwxcRanking().color}; border-color: ${getDailyJjwxcRanking().color}40;">${tag}</span>`).join('')}
                                     </div>
                                 </div>
                                 <div style="text-align: right;">
-                                    <div style="font-size: 14px; font-weight: 600; color: var(--pink);">${item.popularity}</div>
+                                    <div style="font-size: 14px; font-weight: 600; color: ${getDailyJjwxcRanking().color};">${item.popularity}</div>
                                     <div style="font-size: 12px; color: var(--text-muted);">热度</div>
                                 </div>
                             </div>
@@ -1599,7 +1691,7 @@
                                 <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">${tip.title}</h4>
                                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">${tip.content}</p>
                                 <div style="margin-top: 8px;">
-                                    <a href="https://m.jjwxc.com/search?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-jjwxc">📖 晋江搜索</a>
+                                    <a href="https://m.jjwxc.net/search?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-jjwxc">📖 晋江搜索</a>
                                 </div>
                             </div>
                         `).join('')}
@@ -1694,7 +1786,7 @@
                             <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${item.content}</p>
                             <div style="display: flex; gap: 8px;">
                                 <a href="https://www.douyin.com/search/${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 查看抖音</a>
-                                <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 查看小红书</a>
+                                <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 查看小红书</a>
                             </div>
                         </div>
                     `).join('')}
@@ -1761,7 +1853,7 @@
                             <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${item.feature}</p>
                             <div style="display: flex; gap: 8px;">
                                 <a href="https://www.douyin.com/search/${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 抖音搜索</a>
-                                <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
+                                <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
                             </div>
                         </div>
                     `).join('')}
@@ -1967,7 +2059,7 @@
                                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px;">${item.tip}</p>
                                 <div style="display: flex; gap: 6px;">
                                     <a href="https://www.douyin.com/search/${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-douyin" style="font-size: 11px;">📱</a>
-                                    <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu" style="font-size: 11px;">📕</a>
+                                    <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu" style="font-size: 11px;">📕</a>
                                     <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-bilibili" style="font-size: 11px;">📺</a>
                                 </div>
                             </div>
@@ -2246,7 +2338,7 @@
                     </div>
                     <div style="display: flex; justify-content: center; gap: 12px; margin-top: 16px;">
                         <a href="https://www.douyin.com/search/${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-douyin">📱 抖音搜索</a>
-                        <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
+                        <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
                         <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-bilibili">📺 B站搜索</a>
                     </div>
                 </div>
@@ -2281,7 +2373,7 @@
                                 </div>
                                 <div style="display: flex; gap: 8px;">
                                     <a href="https://www.douyin.com/search/${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-douyin" style="font-size: 11px;">📱</a>
-                                    <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu" style="font-size: 11px;">📕</a>
+                                    <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu" style="font-size: 11px;">📕</a>
                                     <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-bilibili" style="font-size: 11px;">📺</a>
                                 </div>
                             </div>
