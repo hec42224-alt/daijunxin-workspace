@@ -1025,171 +1025,215 @@
                 '📚 坚持就是胜利，你已经很棒了',
                 '💪 每一个小目标的完成，都是向梦想迈进的一步',
                 '🌟 专注当下，不负时光',
-                '🎯 成功在于每天进步一点点'
+                '🎯 成功在于每天进步一点点',
+                '🚀 行动是治愈恐惧的良药',
+                '🌈 相信自己，你比想象中更强大',
+                '⏰ 时间就是生命，效率就是金钱',
+                '🎨 生活不会辜负每一个努力的人',
+                '💡 每一天都是新的开始'
             ];
-            const quote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+            const quote = motivationalQuotes[getDailyIndex(motivationalQuotes)];
 
             document.getElementById('page-todo').innerHTML = `
-                <div class="card" style="background: linear-gradient(135deg, #fff5e6 0%, #fffcf8 100%); border: none; padding: 32px;">
+                <div class="card" style="background: linear-gradient(135deg, #fff5e6 0%, #fffcf8 100%); border: none; padding: 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(255,200,100,0.15);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                         <div>
                             <h2 class="card-title" style="font-size: 24px; color: #5c4b3a;">📋 每日计划</h2>
                             <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">${renderDate()}</p>
                         </div>
-                        <div class="stat-card" style="background: rgba(255,255,255,0.8); padding: 20px 32px;">
-                            <div class="stat-value" style="font-size: 32px;">${progress}%</div>
-                            <div class="stat-label">今日进度</div>
+                        <div class="stat-card" style="background: rgba(255,255,255,0.9); padding: 16px 28px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                            <div class="stat-value" style="font-size: 36px; color: var(--pink);">${progress}%</div>
+                            <div class="stat-label" style="font-size: 13px;">今日进度</div>
                         </div>
                     </div>
-                    <div class="progress-bar" style="height: 12px;">
-                        <div class="progress-fill pink" style="width: ${progress}%"></div>
+                    <div class="progress-bar" style="height: 14px; background: rgba(255,255,255,0.6); border-radius: 7px;">
+                        <div class="progress-fill pink" style="width: ${progress}%; border-radius: 7px; transition: width 0.5s ease;"></div>
                     </div>
-                    <p style="text-align: center; margin-top: 20px; font-size: 15px; color: var(--text-secondary); font-style: italic;">${quote}</p>
+                    <div style="display: flex; justify-content: space-between; margin-top: 16px;">
+                        <div style="display: flex; gap: 20px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 20px; font-weight: 600; color: var(--pink);">${completedCount}</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">已完成</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 20px; font-weight: 600; color: var(--text-primary);">${totalCount - completedCount}</div>
+                                <div style="font-size: 12px; color: var(--text-muted);">待完成</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 14px; color: var(--text-secondary); font-style: italic;">${quote}</p>
+                    </div>
                 </div>
 
-                <div class="two-columns">
-                    <div class="card">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                    <div class="card" style="border-left: 4px solid var(--danger);">
                         <div class="card-header">
                             <h3 class="card-title">🔥 高优先级</h3>
                             <span style="font-size: 13px; color: var(--text-muted);">${highPriority.length} 项</span>
                         </div>
                         <div id="high-priority-list">
                             ${highPriority.map(todo => `
-                                <div class="todo-item">
-                                    <input type="checkbox" onchange="toggleTodo(${todo.id})" ${todo.completed ? 'checked' : ''}>
-                                    <span class="todo-text">${todo.text}</span>
+                                <div class="todo-item" style="padding: 14px 16px; background: rgba(248,203,215,0.3); border-radius: 8px; margin-bottom: 8px;">
+                                    <input type="checkbox" onchange="toggleTodo(${todo.id})" ${todo.completed ? 'checked' : ''} style="width: 18px; height: 18px;">
+                                    <span class="todo-text" style="flex: 1; margin-left: 12px;">${todo.text}</span>
                                     <div class="todo-actions">
-                                        <button class="btn btn-sm btn-danger" onclick="deleteTodo(${todo.id})">删除</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteTodo(${todo.id})" style="padding: 4px 8px;">🗑️</button>
                                     </div>
                                 </div>
-                            `).join('') || '<p style="text-align: center; color: var(--text-muted); padding: 20px;">暂无高优先级任务</p>'}
+                            `).join('') || '<div style="text-align: center; color: var(--text-muted); padding: 20px; font-size: 13px;">🎉 暂无高优先级任务</div>'}
                         </div>
                     </div>
 
-                    <div class="card">
+                    <div class="card" style="border-left: 4px solid var(--warning);">
                         <div class="card-header">
                             <h3 class="card-title">🟡 中优先级</h3>
                             <span style="font-size: 13px; color: var(--text-muted);">${mediumPriority.length} 项</span>
                         </div>
                         <div id="medium-priority-list">
                             ${mediumPriority.map(todo => `
-                                <div class="todo-item">
-                                    <input type="checkbox" onchange="toggleTodo(${todo.id})" ${todo.completed ? 'checked' : ''}>
-                                    <span class="todo-text">${todo.text}</span>
+                                <div class="todo-item" style="padding: 14px 16px; background: rgba(255,243,205,0.3); border-radius: 8px; margin-bottom: 8px;">
+                                    <input type="checkbox" onchange="toggleTodo(${todo.id})" ${todo.completed ? 'checked' : ''} style="width: 18px; height: 18px;">
+                                    <span class="todo-text" style="flex: 1; margin-left: 12px;">${todo.text}</span>
                                     <div class="todo-actions">
-                                        <button class="btn btn-sm btn-danger" onclick="deleteTodo(${todo.id})">删除</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteTodo(${todo.id})" style="padding: 4px 8px;">🗑️</button>
                                     </div>
                                 </div>
-                            `).join('') || '<p style="text-align: center; color: var(--text-muted); padding: 20px;">暂无中优先级任务</p>'}
+                            `).join('') || '<div style="text-align: center; color: var(--text-muted); padding: 20px; font-size: 13px;">🎉 暂无中优先级任务</div>'}
+                        </div>
+                    </div>
+
+                    <div class="card" style="border-left: 4px solid var(--success);">
+                        <div class="card-header">
+                            <h3 class="card-title">🟢 低优先级</h3>
+                            <span style="font-size: 13px; color: var(--text-muted);">${lowPriority.length} 项</span>
+                        </div>
+                        <div id="low-priority-list">
+                            ${lowPriority.map(todo => `
+                                <div class="todo-item" style="padding: 14px 16px; background: rgba(200,240,200,0.2); border-radius: 8px; margin-bottom: 8px;">
+                                    <input type="checkbox" onchange="toggleTodo(${todo.id})" ${todo.completed ? 'checked' : ''} style="width: 18px; height: 18px;">
+                                    <span class="todo-text" style="flex: 1; margin-left: 12px;">${todo.text}</span>
+                                    <div class="todo-actions">
+                                        <button class="btn btn-sm btn-danger" onclick="deleteTodo(${todo.id})" style="padding: 4px 8px;">🗑️</button>
+                                    </div>
+                                </div>
+                            `).join('') || '<div style="text-align: center; color: var(--text-muted); padding: 20px; font-size: 13px;">🎉 暂无低优先级任务</div>'}
                         </div>
                     </div>
                 </div>
 
+                <div class="card" style="border-radius: 16px;">
+                    <div class="card-header">
+                        <h3 class="card-title" style="font-size: 18px;">✏️ 添加新待办</h3>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <input type="text" class="input" placeholder="输入待办内容..." id="new-todo-input" onkeypress="if(event.key==='Enter') addTodo(this.value, document.getElementById('new-todo-priority').value)" style="flex: 1; min-width: 200px; padding: 12px; border-radius: 10px;">
+                            <select class="select" id="new-todo-priority" style="width: auto; padding: 12px; border-radius: 10px;">
+                                <option value="high">🔴 高优先级</option>
+                                <option value="medium">🟡 中优先级</option>
+                                <option value="low">🟢 低优先级</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="addTodo(document.getElementById('new-todo-input').value, document.getElementById('new-todo-priority').value)" style="padding: 12px 24px; border-radius: 10px;">➕ 添加</button>
+                        </div>
+                    </div>
+                </div>
+
+                ${completed.length > 0 ? `
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">📝 待办列表</h3>
-                        <span style="font-size: 13px; color: var(--text-muted);">${lowPriority.length} 项待办</span>
+                        <h3 class="card-title">✅ 已完成任务</h3>
+                        <span style="font-size: 13px; color: var(--text-muted);">${completed.length} 项</span>
                     </div>
-                    <div id="todo-list">
-                        ${lowPriority.map(todo => `
-                            <div class="todo-item">
-                                <input type="checkbox" onchange="toggleTodo(${todo.id})" ${todo.completed ? 'checked' : ''}>
-                                <span class="todo-text">${todo.text}</span>
-                                <span class="tag priority-low">低</span>
-                                <div class="todo-actions">
-                                    <button class="btn btn-sm btn-danger" onclick="deleteTodo(${todo.id})">删除</button>
-                                </div>
-                            </div>
-                        `).join('') || '<p style="text-align: center; color: var(--text-muted); padding: 20px;">暂无待办任务</p>'}
+                    <div id="completed-list">
                         ${completed.map(todo => `
-                            <div class="todo-item completed">
-                                <input type="checkbox" onchange="toggleTodo(${todo.id})" checked>
+                            <div class="todo-item completed" style="padding: 12px 16px; background: rgba(200,240,200,0.15); border-radius: 8px; margin-bottom: 6px;">
+                                <input type="checkbox" onchange="toggleTodo(${todo.id})" checked style="width: 16px; height: 16px;">
                                 <span class="todo-text">${todo.text}</span>
                                 <div class="todo-actions">
-                                    <button class="btn btn-sm btn-danger" onclick="deleteTodo(${todo.id})">删除</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteTodo(${todo.id})" style="padding: 3px 6px;">🗑️</button>
                                 </div>
                             </div>
                         `).join('')}
-                    </div>
-                    <div class="quick-add-form">
-                        <input type="text" class="input" placeholder="添加新待办..." id="new-todo-input" onkeypress="if(event.key==='Enter') addTodo(this.value, 'low')">
-                        <select class="select" id="new-todo-priority" style="width: auto;">
-                            <option value="high">🔴 高</option>
-                            <option value="medium">🟡 中</option>
-                            <option value="low">🟢 低</option>
-                        </select>
-                        <button class="btn btn-primary" onclick="addTodo(document.getElementById('new-todo-input').value, document.getElementById('new-todo-priority').value)">+ 添加</button>
                     </div>
                 </div>
+                ` : ''}
 
-                <div class="card" style="padding: 20px;">
-                    <div class="calendar-nav">
-                        <button onclick="changeMonth(-1)">◀ 上月</button>
-                        <span style="font-size: 16px; font-weight: 600;">${year}年${month}月</span>
-                        <button onclick="changeMonth(1)">下月 ▶</button>
+                <div class="card" style="padding: 24px; border-radius: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div>
+                            <h3 class="card-title" style="font-size: 18px;">📅 月度计划</h3>
+                            <p style="font-size: 13px; color: var(--text-muted);">${year}年${month}月</p>
+                        </div>
+                        <div class="calendar-nav" style="display: flex; gap: 8px;">
+                            <button onclick="changeMonth(-1)" class="btn btn-sm btn-outline" style="padding: 8px 16px;">◀</button>
+                            <button onclick="currentMonth = new Date(); renderTodoPage();" class="btn btn-sm btn-secondary" style="padding: 8px 16px;">今天</button>
+                            <button onclick="changeMonth(1)" class="btn btn-sm btn-outline" style="padding: 8px 16px;">▶</button>
+                        </div>
                     </div>
-                    <div id="month-todos-list" style="margin-top: 16px;">
-                        ${monthTodos.map(todo => `
-                            <div class="todo-item" style="background: rgba(230,213,195,0.1);">
-                                <input type="checkbox" onchange="toggleMonthTodo(${todo.id})" ${todo.completed ? 'checked' : ''}>
-                                <span class="todo-text">${todo.text}</span>
-                                <span class="tag ${todo.priority === 'high' ? 'priority-high' : todo.priority === 'medium' ? 'priority-medium' : 'priority-low'}">${todo.priority === 'high' ? '高' : todo.priority === 'medium' ? '中' : '低'}</span>
-                                <div class="todo-actions">
-                                    <button class="btn btn-sm btn-danger" onclick="deleteMonthTodo(${todo.id})">删除</button>
-                                </div>
-                            </div>
-                        `).join('')}
+                    <div id="month-todos-list" style="max-height: 250px; overflow-y: auto;">
+                        ${monthTodos.length > 0 ? monthTodos.map(function(todo) {
+                            var borderColor = todo.priority === 'high' ? 'var(--danger)' : todo.priority === 'medium' ? 'var(--warning)' : 'var(--success)';
+                            var tagClass = todo.priority === 'high' ? 'priority-high' : todo.priority === 'medium' ? 'priority-medium' : 'priority-low';
+                            var tagText = todo.priority === 'high' ? '高' : todo.priority === 'medium' ? '中' : '低';
+                            return '<div class="todo-item" style="background: rgba(230,213,195,0.1); padding: 14px 16px; border-radius: 10px; margin-bottom: 8px; border-left: 3px solid ' + borderColor + ';">' +
+                                '<input type="checkbox" onchange="toggleMonthTodo(' + todo.id + ')" ' + (todo.completed ? 'checked' : '') + ' style="width: 18px; height: 18px;">' +
+                                '<span class="todo-text" style="flex: 1; margin-left: 12px;">' + todo.text + '</span>' +
+                                '<span class="tag ' + tagClass + '">' + tagText + '</span>' +
+                                '<div class="todo-actions">' +
+                                    '<button class="btn btn-sm btn-danger" onclick="deleteMonthTodo(' + todo.id + ')" style="padding: 4px 8px;">🗑️</button>' +
+                                '</div>' +
+                            '</div>';
+                        }).join('') : '<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 14px;">暂无月度计划</div>'}
                     </div>
                     <div class="quick-add-form" style="margin-top: 16px;">
-                        <input type="text" class="input" placeholder="添加月度待办..." id="new-month-todo-input" onkeypress="if(event.key==='Enter') addMonthTodo(this.value, 'medium')">
-                        <button class="btn btn-secondary" onclick="addMonthTodo(document.getElementById('new-month-todo-input').value, 'medium')">+ 添加</button>
+                        <input type="text" class="input" placeholder="添加月度计划..." id="new-month-todo-input" onkeypress="if(event.key==='Enter') addMonthTodo(this.value, 'medium')" style="flex: 1; padding: 10px; border-radius: 10px;">
+                        <button class="btn btn-secondary" onclick="addMonthTodo(document.getElementById('new-month-todo-input').value, 'medium')" style="padding: 10px 20px; border-radius: 10px;">➕ 添加</button>
                     </div>
                 </div>
 
-                <div class="two-columns">
-                    <div class="card">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                    <div class="card" style="border-radius: 16px;">
                         <div class="card-header">
-                            <h3 class="card-title">🔄 周期计划</h3>
+                            <h3 class="card-title" style="font-size: 18px;">🔄 周期计划</h3>
                             <span style="font-size: 13px; color: var(--text-muted);">${cyclePlans.length} 项</span>
                         </div>
-                        <div id="cycle-plans-list">
+                        <div id="cycle-plans-list" style="max-height: 200px; overflow-y: auto;">
                             ${cyclePlans.map(plan => `
-                                <div class="todo-item">
-                                    <span style="font-size: 20px;">📅</span>
-                                    <span class="todo-text">${plan.text}</span>
+                                <div class="todo-item" style="padding: 14px 16px; background: rgba(149,179,214,0.15); border-radius: 10px; margin-bottom: 8px;">
+                                    <span style="font-size: 18px;">📅</span>
+                                    <span class="todo-text" style="flex: 1; margin-left: 10px;">${plan.text}</span>
                                     <div class="todo-actions">
-                                        <button class="btn btn-sm btn-danger" onclick="deleteCyclePlan(${plan.id})">删除</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteCyclePlan(${plan.id})" style="padding: 4px 8px;">🗑️</button>
                                     </div>
                                 </div>
-                            `).join('') || '<p style="text-align: center; color: var(--text-muted); padding: 20px;">暂无周期计划</p>'}
+                            `).join('') || '<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 14px;">暂无周期计划</div>'}
                         </div>
-                        <div class="quick-add-form">
-                            <input type="text" class="input" placeholder="添加周期计划..." id="new-cycle-plan-input" onkeypress="if(event.key==='Enter') addCyclePlan(this.value)">
-                            <button class="btn btn-secondary" onclick="addCyclePlan(document.getElementById('new-cycle-plan-input').value)">+ 添加</button>
+                        <div class="quick-add-form" style="padding: 16px;">
+                            <input type="text" class="input" placeholder="添加周期计划..." id="new-cycle-plan-input" onkeypress="if(event.key==='Enter') addCyclePlan(this.value)" style="flex: 1; padding: 10px; border-radius: 10px;">
+                            <button class="btn btn-secondary" onclick="addCyclePlan(document.getElementById('new-cycle-plan-input').value)" style="padding: 10px 18px; border-radius: 10px;">➕ 添加</button>
                         </div>
                     </div>
 
-                    <div class="card">
+                    <div class="card" style="border-radius: 16px; border: 2px solid rgba(212,107,138,0.3);">
                         <div class="card-header">
-                            <h3 class="card-title">⭐ 重点工作</h3>
+                            <h3 class="card-title" style="font-size: 18px;">⭐ 重点工作</h3>
                             <span style="font-size: 13px; color: var(--text-muted);">${focusWorks.length} 项</span>
                         </div>
-                        <div id="focus-works-list">
-                            ${focusWorks.sort((a, b) => a.order - b.order).map((work, index) => `
-                                <div class="todo-item" style="background: rgba(212,107,138,0.05);">
-                                    <span style="font-size: 16px; font-weight: 600; color: var(--pink);">${index + 1}.</span>
-                                    <span class="todo-text">${work.text}</span>
-                                    <div class="todo-actions">
-                                        <button class="btn btn-sm btn-outline" onclick="moveFocusWork(${work.id}, 'up')">▲</button>
-                                        <button class="btn btn-sm btn-outline" onclick="moveFocusWork(${work.id}, 'down')">▼</button>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteFocusWork(${work.id})">删除</button>
-                                    </div>
-                                </div>
-                            `).join('') || '<p style="text-align: center; color: var(--text-muted); padding: 20px;">暂无重点工作</p>'}
+                        <div id="focus-works-list" style="max-height: 200px; overflow-y: auto;">
+                            ${focusWorks.length > 0 ? focusWorks.sort(function(a, b) { return a.order - b.order; }).map(function(work, index) {
+                                return '<div class="todo-item" style="padding: 14px 16px; background: rgba(212,107,138,0.08); border-radius: 10px; margin-bottom: 8px;">' +
+                                    '<span style="font-size: 20px; font-weight: 700; color: var(--pink); width: 30px; text-align: center;">' + (index + 1) + '</span>' +
+                                    '<span class="todo-text" style="flex: 1; margin-left: 10px;">' + work.text + '</span>' +
+                                    '<div class="todo-actions" style="display: flex; gap: 4px;">' +
+                                        '<button class="btn btn-sm btn-outline" onclick="moveFocusWork(' + work.id + ', \'up\')" style="padding: 4px 8px;">▲</button>' +
+                                        '<button class="btn btn-sm btn-outline" onclick="moveFocusWork(' + work.id + ', \'down\')" style="padding: 4px 8px;">▼</button>' +
+                                        '<button class="btn btn-sm btn-danger" onclick="deleteFocusWork(' + work.id + ')" style="padding: 4px 8px;">🗑️</button>' +
+                                    '</div>' +
+                                '</div>';
+                            }).join('') : '<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 14px;">暂无重点工作</div>'}
                         </div>
-                        <div class="quick-add-form">
-                            <input type="text" class="input" placeholder="添加重点工作..." id="new-focus-work-input" onkeypress="if(event.key==='Enter') addFocusWork(this.value)">
-                            <button class="btn btn-primary" onclick="addFocusWork(document.getElementById('new-focus-work-input').value)">+ 添加</button>
+                        <div class="quick-add-form" style="padding: 16px;">
+                            <input type="text" class="input" placeholder="添加重点工作..." id="new-focus-work-input" onkeypress="if(event.key==='Enter') addFocusWork(this.value)" style="flex: 1; padding: 10px; border-radius: 10px;">
+                            <button class="btn btn-primary" onclick="addFocusWork(document.getElementById('new-focus-work-input').value)" style="padding: 10px 18px; border-radius: 10px;">➕ 添加</button>
                         </div>
                     </div>
                 </div>
@@ -1300,54 +1344,60 @@
             const plans = getTeachingPlans();
 
             document.getElementById('page-teaching').innerHTML = `
-                <div class="card">
-                    <div class="tabs">
-                        <button class="tab active" onclick="switchTeachingTab('plans')">📝 工作规划</button>
-                        <button class="tab" onclick="switchTeachingTab('tips')">💡 管理知识</button>
-                        <button class="tab" onclick="switchTeachingTab('resources')">📚 比赛资源</button>
+                <div class="card" style="border-radius: 16px;">
+                    <div style="display: flex; background: rgba(230,213,195,0.1); padding: 6px; border-radius: 12px; margin-bottom: 24px;">
+                        <button class="tab active" onclick="switchTeachingTab('plans')" style="flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 500;">📝 工作规划</button>
+                        <button class="tab" onclick="switchTeachingTab('tips')" style="flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 500;">💡 管理知识</button>
+                        <button class="tab" onclick="switchTeachingTab('resources')" style="flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 500;">📚 比赛资源</button>
                     </div>
 
                     <div id="teaching-tab-plans" class="tab-content active">
-                        <div class="highlight" style="margin-bottom: 20px;">
-                            <p>☀️ <strong>暑假期间，教学工作暂停。</strong>您可提前备课或学习教学理论，为下学期做好准备。</p>
+                        <div class="highlight" style="margin-bottom: 20px; padding: 16px; background: linear-gradient(135deg, rgba(255,200,100,0.1) 0%, rgba(255,240,200,0.1) 100%); border-radius: 12px;">
+                            <p style="font-size: 14px;">☀️ <strong>暑假期间，教学工作暂停。</strong>您可提前备课或学习教学理论，为下学期做好准备。</p>
                         </div>
 
                         <div id="teaching-plans-list">
                             ${plans.map(plan => `
-                                <div class="todo-item" style="background: rgba(230,213,195,0.05);">
+                                <div class="todo-item" style="background: rgba(230,213,195,0.05); padding: 16px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid ${plan.status === 'completed' ? 'var(--success)' : plan.status === 'in_progress' ? 'var(--warning)' : 'var(--text-muted)'}; transition: all 0.3s ease;">
                                     <div style="flex: 1;">
-                                        <div class="todo-text">${plan.title}</div>
-                                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">截止日期：${plan.deadline}</div>
+                                        <div class="todo-text" style="font-size: 15px;">${plan.title}</div>
+                                        <div style="font-size: 13px; color: var(--text-muted); margin-top: 6px;">📅 截止日期：${plan.deadline}</div>
+                                        <div style="font-size: 12px; color: ${plan.status === 'completed' ? 'var(--success)' : plan.status === 'in_progress' ? 'var(--warning)' : 'var(--text-muted)'}; margin-top: 4px;">
+                                            ${plan.status === 'completed' ? '✅ 已完成' : plan.status === 'in_progress' ? '⏳ 进行中' : '📋 未开始'}
+                                        </div>
                                     </div>
-                                    <div class="todo-actions">
-                                        <select class="select" style="width: auto; padding: 4px 8px; font-size: 12px;" onchange="updateTeachingPlanStatus(${plan.id}, this.value)">
+                                    <div class="todo-actions" style="display: flex; flex-direction: column; gap: 8px;">
+                                        <select class="select" style="width: auto; padding: 6px 10px; font-size: 12px; border-radius: 8px;" onchange="updateTeachingPlanStatus(${plan.id}, this.value)">
                                             <option value="pending" ${plan.status === 'pending' ? 'selected' : ''}>未开始</option>
                                             <option value="in_progress" ${plan.status === 'in_progress' ? 'selected' : ''}>进行中</option>
                                             <option value="completed" ${plan.status === 'completed' ? 'selected' : ''}>已完成</option>
                                         </select>
-                                        <button class="btn btn-sm btn-danger" onclick="deleteTeachingPlan(${plan.id})">删除</button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteTeachingPlan(${plan.id})" style="padding: 4px 8px;">🗑️</button>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `).join('') || '<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 14px;">暂无工作规划</div>'}
                         </div>
 
-                        <div class="quick-add-form">
-                            <input type="text" class="input" placeholder="任务名称..." id="new-plan-title">
-                            <input type="date" class="input" style="width: auto;" id="new-plan-deadline">
-                            <button class="btn btn-primary" onclick="addTeachingPlan(document.getElementById('new-plan-title').value, document.getElementById('new-plan-deadline').value)">+ 添加规划</button>
+                        <div class="quick-add-form" style="margin-top: 20px;">
+                            <input type="text" class="input" placeholder="任务名称..." id="new-plan-title" style="flex: 1; padding: 12px; border-radius: 10px;">
+                            <input type="date" class="input" style="width: auto; padding: 12px; border-radius: 10px;" id="new-plan-deadline">
+                            <button class="btn btn-primary" onclick="addTeachingPlan(document.getElementById('new-plan-title').value, document.getElementById('new-plan-deadline').value)" style="padding: 12px 20px; border-radius: 10px;">➕ 添加规划</button>
                         </div>
                     </div>
 
                     <div id="teaching-tab-tips" class="tab-content">
-                        <div class="three-columns">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
                             ${getDailyTeachingTips().map(tip => `
-                                <div class="card" style="padding: 20px;">
-                                    <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">${tip.title}</h4>
-                                    <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${tip.content}</p>
-                                    <div style="display: flex; gap: 8px;">
-                                        <a href="https://www.douyin.com/search/${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 抖音</a>
-                                        <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书</a>
-                                        <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-bilibili">📺 B站</a>
+                                <div class="card" style="padding: 24px; border-radius: 16px; border: 1px solid rgba(72,168,72,0.2); background: linear-gradient(135deg, rgba(200,240,200,0.1) 0%, rgba(255,255,255,0.5) 100%);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+                                        <span style="font-size: 24px;">💡</span>
+                                        <h4 style="font-size: 16px; font-weight: 600; color: var(--text-primary);">${tip.title}</h4>
+                                    </div>
+                                    <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">${tip.content}</p>
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                        <a href="https://www.douyin.com/search/${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-douyin" style="padding: 6px 12px; font-size: 12px;">📱</a>
+                                        <a href="https://www.xiaohongshu.com/search_result?keyword=${tip.keyword}" target="_blank" class="btn-platform btn-xiaohongshu" style="padding: 6px 12px; font-size: 12px;">📕</a>
+                                        <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-bilibili" style="padding: 6px 12px; font-size: 12px;">📺</a>
                                     </div>
                                 </div>
                             `).join('')}
@@ -1355,13 +1405,16 @@
                     </div>
 
                     <div id="teaching-tab-resources" class="tab-content">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
                             ${getDailyTeachingResources().map(res => `
-                                <div class="card" style="padding: 20px;">
-                                    <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">${res.title}</h4>
-                                    <div style="display: flex; gap: 8px;">
-                                        <a href="https://www.baidu.com/s?wd=site:kns.cnki.net+${encodeURIComponent(res.keyword)}" target="_blank" class="btn-platform btn-cnki">📚 知网搜索</a>
-                                        <a href="https://basic.smartedu.cn/search?q=${encodeURIComponent(res.keyword)}" target="_blank" class="btn-platform btn-gov">🎓 国家平台</a>
+                                <div class="card" style="padding: 24px; border-radius: 16px; border: 1px solid rgba(149,179,214,0.2); background: linear-gradient(135deg, rgba(200,220,240,0.1) 0%, rgba(255,255,255,0.5) 100%);">
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+                                        <span style="font-size: 24px;">📚</span>
+                                        <h4 style="font-size: 16px; font-weight: 600; color: var(--text-primary);">${res.title}</h4>
+                                    </div>
+                                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                        <a href="https://www.baidu.com/s?wd=site:kns.cnki.net+${encodeURIComponent(res.keyword)}" target="_blank" class="btn-platform btn-cnki" style="padding: 8px 16px; border-radius: 8px;">📚 知网搜索</a>
+                                        <a href="https://basic.smartedu.cn/search?q=${encodeURIComponent(res.keyword)}" target="_blank" class="btn-platform btn-gov" style="padding: 8px 16px; border-radius: 8px;">🎓 国家平台</a>
                                     </div>
                                 </div>
                             `).join('')}
@@ -1384,108 +1437,108 @@
                 name: '现代言情',
                 icon: '💖',
                 color: '#FF6B9D',
-                link: 'https://m.jjwxc.net/ranklist?type=3',
+                link: 'https://m.jjwxc.com/ranklist?type=3',
                 books: [
-                    { rank: 1, title: '错撩', author: '翘摇', tags: ['豪门', '甜宠', '先婚后爱'], status: '已完结', popularity: '1200万', link: 'https://m.jjwxc.net/book/4071306' },
-                    { rank: 2, title: '偷偷藏不住', author: '竹已', tags: ['校园', '暗恋', '甜宠'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.net/book/3624305' },
-                    { rank: 3, title: '白日梦我', author: '栖见', tags: ['校园', '青春', '治愈'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.net/book/3453198' },
-                    { rank: 4, title: '难哄', author: '竹已', tags: ['都市', '治愈', '破镜重圆'], status: '已完结', popularity: '1800万', link: 'https://m.jjwxc.net/book/4205000' },
-                    { rank: 5, title: '当我飞奔向你', author: '竹已', tags: ['校园', '甜宠', '青梅竹马'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/3588905' },
-                    { rank: 6, title: '折月亮', author: '竹已', tags: ['都市', '治愈', '成长'], status: '连载中', popularity: '700万', link: 'https://m.jjwxc.net/book/4256666' },
-                    { rank: 7, title: '偏偏宠爱', author: '藤萝为枝', tags: ['校园', '重生', '甜宠'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.net/book/3250045' },
-                    { rank: 8, title: '告白', author: '应橙', tags: ['都市', '暗恋', '治愈'], status: '连载中', popularity: '500万', link: 'https://m.jjwxc.net/book/4327836' },
-                    { rank: 9, title: '一万次心动', author: '一路烦花', tags: ['豪门', '甜宠', '强强'], status: '已完结', popularity: '950万', link: 'https://m.jjwxc.net/book/3000000' },
-                    { rank: 10, title: '夫人你马甲又掉了', author: '一路烦花', tags: ['都市', '甜宠', '马甲'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/3100000' }
+                    { rank: 1, title: '错撩', author: '翘摇', tags: ['豪门', '甜宠', '先婚后爱'], status: '已完结', popularity: '1200万', link: 'https://m.jjwxc.com/book/4071306' },
+                    { rank: 2, title: '偷偷藏不住', author: '竹已', tags: ['校园', '暗恋', '甜宠'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.com/book/3624305' },
+                    { rank: 3, title: '白日梦我', author: '栖见', tags: ['校园', '青春', '治愈'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.com/book/3453198' },
+                    { rank: 4, title: '难哄', author: '竹已', tags: ['都市', '治愈', '破镜重圆'], status: '已完结', popularity: '1800万', link: 'https://m.jjwxc.com/book/4205000' },
+                    { rank: 5, title: '当我飞奔向你', author: '竹已', tags: ['校园', '甜宠', '青梅竹马'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.com/book/3588905' },
+                    { rank: 6, title: '折月亮', author: '竹已', tags: ['都市', '治愈', '成长'], status: '连载中', popularity: '700万', link: 'https://m.jjwxc.com/book/4256666' },
+                    { rank: 7, title: '偏偏宠爱', author: '藤萝为枝', tags: ['校园', '重生', '甜宠'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.com/book/3250045' },
+                    { rank: 8, title: '告白', author: '应橙', tags: ['都市', '暗恋', '治愈'], status: '连载中', popularity: '500万', link: 'https://m.jjwxc.com/book/4327836' },
+                    { rank: 9, title: '一万次心动', author: '一路烦花', tags: ['豪门', '甜宠', '强强'], status: '已完结', popularity: '950万', link: 'https://m.jjwxc.com/book/3000000' },
+                    { rank: 10, title: '夫人你马甲又掉了', author: '一路烦花', tags: ['都市', '甜宠', '马甲'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.com/book/3100000' }
                 ]
             },
             ancient: {
                 name: '古言宅斗',
                 icon: '🏮',
                 color: '#FFB347',
-                link: 'https://m.jjwxc.net/ranklist?type=2',
+                link: 'https://m.jjwxc.com/ranklist?type=2',
                 books: [
-                    { rank: 1, title: '重生之将门毒后', author: '千山茶客', tags: ['重生', '宅斗', '权谋'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.net/book/2632856' },
-                    { rank: 2, title: '嫡谋', author: '面北眉南', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '950万', link: 'https://m.jjwxc.net/book/2200375' },
-                    { rank: 3, title: '宁安如梦', author: '时镜', tags: ['重生', '宫斗', '权谋'], status: '已完结', popularity: '1300万', link: 'https://m.jjwxc.net/book/3954300' },
-                    { rank: 4, title: '似锦', author: '冬天的柳叶', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1400万', link: 'https://m.jjwxc.net/book/3100000' },
-                    { rank: 5, title: '九重紫', author: '吱吱', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '1400万', link: 'https://m.jjwxc.net/book/3400000' },
-                    { rank: 6, title: '惜花芷', author: '空留', tags: ['宅斗', '重生', '权谋'], status: '连载中', popularity: '700万', link: 'https://m.jjwxc.net/book/4400000' },
-                    { rank: 7, title: '赴京', author: '闲听落花', tags: ['宅斗', '重生', '甜宠'], status: '连载中', popularity: '1100万', link: 'https://m.jjwxc.net/book/4500000' },
-                    { rank: 8, title: '锦桐', author: '闲听落花', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/2732372' },
-                    { rank: 9, title: '闺宁', author: '意迟迟', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1100万', link: 'https://m.jjwxc.net/book/2800000' },
-                    { rank: 10, title: '嫡长女她又美又飒', author: '千苒君笑', tags: ['宅斗', '重生', '爽文'], status: '连载中', popularity: '800万', link: 'https://m.jjwxc.net/book/4350000' }
+                    { rank: 1, title: '重生之将门毒后', author: '千山茶客', tags: ['重生', '宅斗', '权谋'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.com/book/2632856' },
+                    { rank: 2, title: '嫡谋', author: '面北眉南', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '950万', link: 'https://m.jjwxc.com/book/2200375' },
+                    { rank: 3, title: '宁安如梦', author: '时镜', tags: ['重生', '宫斗', '权谋'], status: '已完结', popularity: '1300万', link: 'https://m.jjwxc.com/book/3954300' },
+                    { rank: 4, title: '似锦', author: '冬天的柳叶', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1400万', link: 'https://m.jjwxc.com/book/3100000' },
+                    { rank: 5, title: '九重紫', author: '吱吱', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '1400万', link: 'https://m.jjwxc.com/book/3400000' },
+                    { rank: 6, title: '惜花芷', author: '空留', tags: ['宅斗', '重生', '权谋'], status: '连载中', popularity: '700万', link: 'https://m.jjwxc.com/book/4400000' },
+                    { rank: 7, title: '赴京', author: '闲听落花', tags: ['宅斗', '重生', '甜宠'], status: '连载中', popularity: '1100万', link: 'https://m.jjwxc.com/book/4500000' },
+                    { rank: 8, title: '锦桐', author: '闲听落花', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.com/book/2732372' },
+                    { rank: 9, title: '闺宁', author: '意迟迟', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1100万', link: 'https://m.jjwxc.com/book/2800000' },
+                    { rank: 10, title: '嫡长女她又美又飒', author: '千苒君笑', tags: ['宅斗', '重生', '爽文'], status: '连载中', popularity: '800万', link: 'https://m.jjwxc.com/book/4350000' }
                 ]
             },
             xianxia: {
                 name: '仙侠奇缘',
                 icon: '✨',
                 color: '#9B59B6',
-                link: 'https://m.jjwxc.net/ranklist?type=11',
+                link: 'https://m.jjwxc.com/ranklist?type=11',
                 books: [
-                    { rank: 1, title: '长月烬明', author: '藤萝为枝', tags: ['仙侠', '虐恋', 'HE'], status: '连载中', popularity: '1500万', link: 'https://m.jjwxc.net/book/4496403' },
-                    { rank: 2, title: '长相思', author: '桐华', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.net/book/3200000' },
-                    { rank: 3, title: '三生三世十里桃花', author: '唐七', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '650万', link: 'https://m.jjwxc.net/book/600000' },
-                    { rank: 4, title: '琉璃美人煞', author: '十四郎', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '700万', link: 'https://m.jjwxc.net/book/800000' },
-                    { rank: 5, title: '星落凝成糖', author: '一度君华', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '750万', link: 'https://m.jjwxc.net/book/3000000' },
-                    { rank: 6, title: '落花时节又逢君', author: '蜀客', tags: ['仙侠', '虐恋', '重生'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.net/book/1000000' },
-                    { rank: 7, title: '沉香如屑', author: '苏寞', tags: ['仙侠', '虐恋', 'HE'], status: '已完结', popularity: '550万', link: 'https://m.jjwxc.net/book/1200000' },
-                    { rank: 8, title: '千古玦尘', author: '星零', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '500万', link: 'https://m.jjwxc.net/book/1500000' },
-                    { rank: 9, title: '护心', author: '九鹭非香', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '450万', link: 'https://m.jjwxc.net/book/1800000' },
-                    { rank: 10, title: '驭鲛记', author: '九鹭非香', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '400万', link: 'https://m.jjwxc.net/book/2000000' }
+                    { rank: 1, title: '长月烬明', author: '藤萝为枝', tags: ['仙侠', '虐恋', 'HE'], status: '连载中', popularity: '1500万', link: 'https://m.jjwxc.com/book/4496403' },
+                    { rank: 2, title: '长相思', author: '桐华', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.com/book/3200000' },
+                    { rank: 3, title: '三生三世十里桃花', author: '唐七', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '650万', link: 'https://m.jjwxc.com/book/600000' },
+                    { rank: 4, title: '琉璃美人煞', author: '十四郎', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '700万', link: 'https://m.jjwxc.com/book/800000' },
+                    { rank: 5, title: '星落凝成糖', author: '一度君华', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '750万', link: 'https://m.jjwxc.com/book/3000000' },
+                    { rank: 6, title: '落花时节又逢君', author: '蜀客', tags: ['仙侠', '虐恋', '重生'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.com/book/1000000' },
+                    { rank: 7, title: '沉香如屑', author: '苏寞', tags: ['仙侠', '虐恋', 'HE'], status: '已完结', popularity: '550万', link: 'https://m.jjwxc.com/book/1200000' },
+                    { rank: 8, title: '千古玦尘', author: '星零', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '500万', link: 'https://m.jjwxc.com/book/1500000' },
+                    { rank: 9, title: '护心', author: '九鹭非香', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '450万', link: 'https://m.jjwxc.com/book/1800000' },
+                    { rank: 10, title: '驭鲛记', author: '九鹭非香', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '400万', link: 'https://m.jjwxc.com/book/2000000' }
                 ]
             },
             mystery: {
                 name: '悬疑推理',
                 icon: '🔍',
                 color: '#3498DB',
-                link: 'https://m.jjwxc.net/ranklist?type=18',
+                link: 'https://m.jjwxc.com/ranklist?type=18',
                 books: [
-                    { rank: 1, title: '掌中之物', author: '贝昕', tags: ['悬疑', '虐恋', '复仇'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/2515144' },
-                    { rank: 2, title: '狂飙', author: '徐纪周', tags: ['悬疑', '刑侦', '扫黑'], status: '已完结', popularity: '2000万', link: 'https://m.jjwxc.net/book/4480000' },
-                    { rank: 3, title: '默读', author: 'Priest', tags: ['悬疑', '刑侦', '耽美'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.net/book/2800000' },
-                    { rank: 4, title: '破云', author: '淮上', tags: ['悬疑', '刑侦', '耽美'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/3000000' },
-                    { rank: 5, title: '吞海', author: '淮上', tags: ['悬疑', '刑侦', '耽美'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/3200000' },
-                    { rank: 6, title: 'SCI谜案集', author: '耳雅', tags: ['悬疑', '探案', '耽美'], status: '连载中', popularity: '700万', link: 'https://m.jjwxc.net/book/1500000' },
-                    { rank: 7, title: '犯罪心理', author: '长洱', tags: ['悬疑', '心理', '耽美'], status: '已完结', popularity: '650万', link: 'https://m.jjwxc.net/book/2000000' },
-                    { rank: 8, title: '死亡通知单', author: '周浩晖', tags: ['悬疑', '推理', '犯罪'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.net/book/2200000' },
-                    { rank: 9, title: '十宗罪', author: '蜘蛛', tags: ['悬疑', '犯罪', '惊悚'], status: '已完结', popularity: '550万', link: 'https://m.jjwxc.net/book/2400000' },
-                    { rank: 10, title: '法医秦明', author: '秦明', tags: ['悬疑', '法医', '推理'], status: '已完结', popularity: '500万', link: 'https://m.jjwxc.net/book/2600000' }
+                    { rank: 1, title: '掌中之物', author: '贝昕', tags: ['悬疑', '虐恋', '复仇'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.com/book/2515144' },
+                    { rank: 2, title: '狂飙', author: '徐纪周', tags: ['悬疑', '刑侦', '扫黑'], status: '已完结', popularity: '2000万', link: 'https://m.jjwxc.com/book/4480000' },
+                    { rank: 3, title: '默读', author: 'Priest', tags: ['悬疑', '刑侦', '耽美'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.com/book/2800000' },
+                    { rank: 4, title: '破云', author: '淮上', tags: ['悬疑', '刑侦', '耽美'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.com/book/3000000' },
+                    { rank: 5, title: '吞海', author: '淮上', tags: ['悬疑', '刑侦', '耽美'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.com/book/3200000' },
+                    { rank: 6, title: 'SCI谜案集', author: '耳雅', tags: ['悬疑', '探案', '耽美'], status: '连载中', popularity: '700万', link: 'https://m.jjwxc.com/book/1500000' },
+                    { rank: 7, title: '犯罪心理', author: '长洱', tags: ['悬疑', '心理', '耽美'], status: '已完结', popularity: '650万', link: 'https://m.jjwxc.com/book/2000000' },
+                    { rank: 8, title: '死亡通知单', author: '周浩晖', tags: ['悬疑', '推理', '犯罪'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.com/book/2200000' },
+                    { rank: 9, title: '十宗罪', author: '蜘蛛', tags: ['悬疑', '犯罪', '惊悚'], status: '已完结', popularity: '550万', link: 'https://m.jjwxc.com/book/2400000' },
+                    { rank: 10, title: '法医秦明', author: '秦明', tags: ['悬疑', '法医', '推理'], status: '已完结', popularity: '500万', link: 'https://m.jjwxc.com/book/2600000' }
                 ]
             },
             martial: {
                 name: '武侠江湖',
                 icon: '🗡️',
                 color: '#2ECC71',
-                link: 'https://m.jjwxc.net/ranklist?type=6',
+                link: 'https://m.jjwxc.com/ranklist?type=6',
                 books: [
-                    { rank: 1, title: '一念关山', author: '沐非', tags: ['武侠', '权谋', '强强'], status: '连载中', popularity: '1600万', link: 'https://m.jjwxc.net/book/4380000' },
-                    { rank: 2, title: '琅琊榜', author: '海宴', tags: ['权谋', '复仇', '友情'], status: '已完结', popularity: '1500万', link: 'https://m.jjwxc.net/book/500000' },
-                    { rank: 3, title: '雪中悍刀行', author: '烽火戏诸侯', tags: ['武侠', '玄幻', '江湖'], status: '已完结', popularity: '1100万', link: 'https://m.jjwxc.net/book/300000' },
-                    { rank: 4, title: '庆余年', author: '猫腻', tags: ['穿越', '权谋', '玄幻'], status: '连载中', popularity: '1200万', link: 'https://m.jjwxc.net/book/400000' },
-                    { rank: 5, title: '将夜', author: '猫腻', tags: ['玄幻', '武侠', '升级'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/600000' },
-                    { rank: 6, title: '择天记', author: '猫腻', tags: ['玄幻', '武侠', '升级'], status: '已完结', popularity: '700万', link: 'https://m.jjwxc.net/book/800000' },
-                    { rank: 7, title: '凡人修仙传', author: '忘语', tags: ['修真', '升级', '玄幻'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.net/book/200000' },
-                    { rank: 8, title: '斗破苍穹', author: '天蚕土豆', tags: ['升级', '玄幻', '热血'], status: '已完结', popularity: '950万', link: 'https://m.jjwxc.net/book/180000' },
-                    { rank: 9, title: '斗罗大陆', author: '唐家三少', tags: ['奇幻', '升级', '热血'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.net/book/150000' },
-                    { rank: 10, title: '全职高手', author: '蝴蝶蓝', tags: ['游戏', '竞技', '热血'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/120000' }
+                    { rank: 1, title: '一念关山', author: '沐非', tags: ['武侠', '权谋', '强强'], status: '连载中', popularity: '1600万', link: 'https://m.jjwxc.com/book/4380000' },
+                    { rank: 2, title: '琅琊榜', author: '海宴', tags: ['权谋', '复仇', '友情'], status: '已完结', popularity: '1500万', link: 'https://m.jjwxc.com/book/500000' },
+                    { rank: 3, title: '雪中悍刀行', author: '烽火戏诸侯', tags: ['武侠', '玄幻', '江湖'], status: '已完结', popularity: '1100万', link: 'https://m.jjwxc.com/book/300000' },
+                    { rank: 4, title: '庆余年', author: '猫腻', tags: ['穿越', '权谋', '玄幻'], status: '连载中', popularity: '1200万', link: 'https://m.jjwxc.com/book/400000' },
+                    { rank: 5, title: '将夜', author: '猫腻', tags: ['玄幻', '武侠', '升级'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.com/book/600000' },
+                    { rank: 6, title: '择天记', author: '猫腻', tags: ['玄幻', '武侠', '升级'], status: '已完结', popularity: '700万', link: 'https://m.jjwxc.com/book/800000' },
+                    { rank: 7, title: '凡人修仙传', author: '忘语', tags: ['修真', '升级', '玄幻'], status: '已完结', popularity: '1000万', link: 'https://m.jjwxc.com/book/200000' },
+                    { rank: 8, title: '斗破苍穹', author: '天蚕土豆', tags: ['升级', '玄幻', '热血'], status: '已完结', popularity: '950万', link: 'https://m.jjwxc.com/book/180000' },
+                    { rank: 9, title: '斗罗大陆', author: '唐家三少', tags: ['奇幻', '升级', '热血'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.com/book/150000' },
+                    { rank: 10, title: '全职高手', author: '蝴蝶蓝', tags: ['游戏', '竞技', '热血'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.com/book/120000' }
                 ]
             },
             ancient_cross: {
                 name: '古言穿越',
                 icon: '⏳',
                 color: '#E67E22',
-                link: 'https://m.jjwxc.net/ranklist?type=17',
+                link: 'https://m.jjwxc.com/ranklist?type=17',
                 books: [
-                    { rank: 1, title: '步步惊心', author: '桐华', tags: ['穿越', '宫斗', '虐恋'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.net/book/1000000' },
-                    { rank: 2, title: '凤囚凰', author: '天衣有风', tags: ['穿越', '权谋', '虐恋'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.net/book/1500000' },
-                    { rank: 3, title: '庶女有毒', author: '秦简', tags: ['宅斗', '重生', '复仇'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.net/book/1800000' },
-                    { rank: 4, title: '东宫', author: '匪我思存', tags: ['古言', '虐恋', '悲剧'], status: '已完结', popularity: '750万', link: 'https://m.jjwxc.net/book/1200000' },
-                    { rank: 5, title: '花琉璃轶闻', author: '月下蝶影', tags: ['古言', '甜宠', '宫斗'], status: '已完结', popularity: '1100万', link: 'https://m.jjwxc.net/book/3500000' },
-                    { rank: 6, title: '楚乔传', author: '潇湘冬儿', tags: ['穿越', '权谋', '强强'], status: '已完结', popularity: '700万', link: 'https://m.jjwxc.net/book/2000000' },
-                    { rank: 7, title: '锦绣未央', author: '秦简', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '650万', link: 'https://m.jjwxc.net/book/2200000' },
-                    { rank: 8, title: '宫锁心玉', author: '于正', tags: ['穿越', '宫斗', '甜宠'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.net/book/2400000' },
-                    { rank: 9, title: '寻找前世之旅', author: 'vivibear', tags: ['穿越', '奇幻', '言情'], status: '已完结', popularity: '550万', link: 'https://m.jjwxc.net/book/2600000' },
-                    { rank: 10, title: '绾青丝', author: '波波', tags: ['穿越', '古风', '言情'], status: '已完结', popularity: '500万', link: 'https://m.jjwxc.net/book/2800000' }
+                    { rank: 1, title: '步步惊心', author: '桐华', tags: ['穿越', '宫斗', '虐恋'], status: '已完结', popularity: '900万', link: 'https://m.jjwxc.com/book/1000000' },
+                    { rank: 2, title: '凤囚凰', author: '天衣有风', tags: ['穿越', '权谋', '虐恋'], status: '已完结', popularity: '800万', link: 'https://m.jjwxc.com/book/1500000' },
+                    { rank: 3, title: '庶女有毒', author: '秦简', tags: ['宅斗', '重生', '复仇'], status: '已完结', popularity: '850万', link: 'https://m.jjwxc.com/book/1800000' },
+                    { rank: 4, title: '东宫', author: '匪我思存', tags: ['古言', '虐恋', '悲剧'], status: '已完结', popularity: '750万', link: 'https://m.jjwxc.com/book/1200000' },
+                    { rank: 5, title: '花琉璃轶闻', author: '月下蝶影', tags: ['古言', '甜宠', '宫斗'], status: '已完结', popularity: '1100万', link: 'https://m.jjwxc.com/book/3500000' },
+                    { rank: 6, title: '楚乔传', author: '潇湘冬儿', tags: ['穿越', '权谋', '强强'], status: '已完结', popularity: '700万', link: 'https://m.jjwxc.com/book/2000000' },
+                    { rank: 7, title: '锦绣未央', author: '秦简', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '650万', link: 'https://m.jjwxc.com/book/2200000' },
+                    { rank: 8, title: '宫锁心玉', author: '于正', tags: ['穿越', '宫斗', '甜宠'], status: '已完结', popularity: '600万', link: 'https://m.jjwxc.com/book/2400000' },
+                    { rank: 9, title: '寻找前世之旅', author: 'vivibear', tags: ['穿越', '奇幻', '言情'], status: '已完结', popularity: '550万', link: 'https://m.jjwxc.com/book/2600000' },
+                    { rank: 10, title: '绾青丝', author: '波波', tags: ['穿越', '古风', '言情'], status: '已完结', popularity: '500万', link: 'https://m.jjwxc.com/book/2800000' }
                 ]
             }
         };
@@ -1510,7 +1563,7 @@
         function searchJjwxc() {
             const keyword = document.getElementById('novel-search-input').value.trim();
             if (keyword) {
-                window.open(`https://m.jjwxc.net/search?keyword=${keyword}`, '_blank');
+                window.open(`https://m.jjwxc.com/search?keyword=${keyword}`, '_blank');
             }
         }
 
@@ -1691,7 +1744,7 @@
                                 <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">${tip.title}</h4>
                                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">${tip.content}</p>
                                 <div style="margin-top: 8px;">
-                                    <a href="https://m.jjwxc.net/search?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-jjwxc">📖 晋江搜索</a>
+                                    <a href="https://m.jjwxc.com/search?keyword=${tip.keyword}" target="_blank" class="btn-platform btn-jjwxc">📖 晋江搜索</a>
                                 </div>
                             </div>
                         `).join('')}
@@ -1769,43 +1822,62 @@
             const summaries = getDriveGeneratedSummaries();
 
             document.getElementById('page-drive').innerHTML = `
-                <div class="card" style="background: linear-gradient(135deg, #f5f0ff 0%, #fffcf8 100%); border: none;">
-                    <div class="card-header">
-                        <h2 class="card-title" style="font-size: 22px;">🚗 开车知识</h2>
-                        <div class="stat-card" style="background: rgba(255,255,255,0.8);">
-                            <div class="stat-value">${summaries.length}/${driveKnowledge.length}</div>
-                            <div class="stat-label">已生成总结</div>
+                <div class="card" style="background: linear-gradient(135deg, #f5f0ff 0%, #fffcf8 100%); border: none; padding: 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(150,100,200,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div>
+                            <h2 class="card-title" style="font-size: 24px; color: #6b4c9a;">🚗 开车知识</h2>
+                            <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">每天学习一点驾驶技巧，安全出行</p>
                         </div>
+                        <div class="stat-card" style="background: rgba(255,255,255,0.9); padding: 16px 28px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                            <div class="stat-value" style="font-size: 28px; color: var(--purple);">${summaries.length}/${driveKnowledge.length}</div>
+                            <div class="stat-label" style="font-size: 13px;">已学习</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar" style="height: 12px; background: rgba(255,255,255,0.6); border-radius: 6px;">
+                        <div class="progress-fill" style="width: ${(summaries.length / driveKnowledge.length) * 100}%; background: var(--purple); border-radius: 6px;"></div>
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                    ${driveKnowledge.map(item => `
-                        <div class="card">
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">${item.title}</h4>
-                            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${item.content}</p>
-                            <div style="display: flex; gap: 8px;">
-                                <a href="https://www.douyin.com/search/${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 查看抖音</a>
-                                <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 查看小红书</a>
-                            </div>
-                        </div>
-                    `).join('')}
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                    ${driveKnowledge.map(function(item) {
+                        var isLearned = summaries.find(function(s) { return s.id === item.id; });
+                        var borderColor = isLearned ? 'rgba(72,168,72,0.3)' : 'rgba(150,100,200,0.2)';
+                        var bgGradient = isLearned ? 'linear-gradient(135deg, rgba(200,240,200,0.1) 0%, rgba(255,255,255,0.5) 100%)' : 'linear-gradient(135deg, rgba(240,230,255,0.1) 0%, rgba(255,255,255,0.5) 100%)';
+                        var learnedTag = isLearned ? '<span class="tag priority-high" style="background: rgba(72,168,72,0.2); color: var(--success); border-color: rgba(72,168,72,0.3);">已学习</span>' : '';
+                        var markButton = !isLearned ? '<button class="btn btn-sm btn-primary" onclick="saveDriveSummary(' + item.id + ')" style="padding: 6px 12px; font-size: 12px;">📝 标记已学</button>' : '';
+                        return '<div class="card" style="padding: 24px; border-radius: 16px; border: 1px solid ' + borderColor + '; background: ' + bgGradient + '; transition: all 0.3s ease;">' +
+                            '<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">' +
+                                '<span style="font-size: 24px;">' + (isLearned ? '✅' : '📚') + '</span>' +
+                                '<h4 style="font-size: 16px; font-weight: 600; color: var(--text-primary);">' + item.title + '</h4>' +
+                                learnedTag +
+                            '</div>' +
+                            '<p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">' + item.content + '</p>' +
+                            '<div style="display: flex; gap: 8px; flex-wrap: wrap;">' +
+                                '<a href="https://www.douyin.com/search/' + encodeURIComponent(item.keyword) + '" target="_blank" class="btn-platform btn-douyin" style="padding: 6px 12px; font-size: 12px;">📱</a>' +
+                                '<a href="https://www.xiaohongshu.com/search_result?keyword=' + item.keyword + '" target="_blank" class="btn-platform btn-xiaohongshu" style="padding: 6px 12px; font-size: 12px;">📕</a>' +
+                                '<a href="https://search.bilibili.com/all?keyword=' + encodeURIComponent(item.keyword) + '" target="_blank" class="btn-platform btn-bilibili" style="padding: 6px 12px; font-size: 12px;">📺</a>' +
+                                markButton +
+                            '</div>' +
+                        '</div>';
+                    }).join('')}
                 </div>
 
                 ${summaries.length > 0 ? `
-                    <div class="card">
+                    <div class="card" style="border-radius: 16px; border: 2px solid rgba(72,168,72,0.3);">
                         <div class="card-header">
-                            <h3 class="card-title">📝 今日知识总结</h3>
-                            <button class="btn btn-sm btn-outline" onclick="clearDriveSummary()">清空总结</button>
+                            <h3 class="card-title" style="font-size: 18px;">📝 已学习知识总结</h3>
+                            <button class="btn btn-sm btn-outline" onclick="clearDriveSummary()" style="padding: 6px 12px;">🗑️ 清空</button>
                         </div>
-                        <div style="padding: 20px; background: rgba(255,245,230,0.5); border-radius: 12px;">
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 16px;">📚 知识关键词汇总</h4>
-                            ${summaries.map(summary => `
-                                <div style="margin-bottom: 12px;">
-                                    <strong style="color: var(--pink);">${summary.title}：</strong>
-                                    <span class="tag priority-high">${summary.keyword}</span>
-                                </div>
-                            `).join('')}
+                        <div style="padding: 20px; background: rgba(200,240,200,0.1); border-radius: 12px;">
+                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 16px; color: var(--success);">📚 知识关键词汇总</h4>
+                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                ${summaries.map(summary => `
+                                    <div style="padding: 10px 16px; background: rgba(72,168,72,0.15); border-radius: 20px; display: flex; align-items: center; gap: 8px;">
+                                        <span>✅</span>
+                                        <span style="font-size: 13px; color: var(--text-primary);">${summary.title}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
                         </div>
                     </div>
                 ` : ''}
@@ -1826,12 +1898,16 @@
             const summary = getStore('fund_summary', '');
 
             document.getElementById('page-fund').innerHTML = `
-                <div class="card" style="background: linear-gradient(135deg, #f0f5ff 0%, #fffcf8 100%); border: none;">
+                <div class="card" style="background: linear-gradient(135deg, #f0f5ff 0%, #fffcf8 100%); border: none; padding: 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(80,120,200,0.1);">
                     <div class="card-header">
-                        <h2 class="card-title" style="font-size: 22px;">📈 基金知识</h2>
+                        <h2 class="card-title" style="font-size: 24px; color: #4a7ccc;">📈 基金理财</h2>
+                        <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">学习基金知识，掌握理财技巧</p>
                     </div>
-                    <div class="highlight">
-                        <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">📚 新手必读</h4>
+                    <div class="highlight" style="background: rgba(80,120,200,0.08); padding: 20px; border-radius: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+                            <span style="font-size: 22px;">📚</span>
+                            <h4 style="font-size: 16px; font-weight: 600;">新手入门指南</h4>
+                        </div>
                         <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
                             <li>基金定投是新手入门的最佳方式，建议选择宽基指数基金</li>
                             <li>不要追涨杀跌，保持长期持有心态，通常建议持有3年以上</li>
@@ -1842,43 +1918,51 @@
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
-                    ${fundKnowledge.map(item => `
-                        <div class="card">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                <h4 style="font-size: 15px; font-weight: 600; color: var(--text-primary);">${item.name}</h4>
-                                <span class="tag ${item.risk === '低风险' ? 'priority-low' : item.risk === '中低风险' ? 'priority-medium' : 'priority-high'}">${item.risk}</span>
-                            </div>
-                            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">${item.type}</p>
-                            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${item.feature}</p>
-                            <div style="display: flex; gap: 8px;">
-                                <a href="https://www.douyin.com/search/${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 抖音搜索</a>
-                                <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
-                            </div>
-                        </div>
-                    `).join('')}
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                    ${fundKnowledge.map(function(item) {
+                        var riskColor = item.risk === '低风险' ? 'rgba(72,168,72,0.3)' : item.risk === '中低风险' ? 'rgba(255,168,0,0.3)' : 'rgba(217,72,72,0.3)';
+                        var riskBg = item.risk === '低风险' ? 'rgba(200,240,200,0.1)' : item.risk === '中低风险' ? 'rgba(255,240,200,0.1)' : 'rgba(255,220,220,0.1)';
+                        var riskTagClass = item.risk === '低风险' ? 'priority-low' : item.risk === '中低风险' ? 'priority-medium' : 'priority-high';
+                        return '<div class="card" style="padding: 24px; border-radius: 16px; border: 1px solid ' + riskColor + '; background: linear-gradient(135deg, ' + riskBg + ' 0%, rgba(255,255,255,0.5) 100%);">' +
+                            '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">' +
+                                '<h4 style="font-size: 16px; font-weight: 600; color: var(--text-primary);">' + item.name + '</h4>' +
+                                '<span class="tag ' + riskTagClass + '" style="padding: 4px 10px; border-radius: 20px;">' + item.risk + '</span>' +
+                            '</div>' +
+                            '<div style="display: inline-block; padding: 4px 10px; background: rgba(80,120,200,0.1); border-radius: 12px; font-size: 12px; color: var(--blue); margin-bottom: 12px;">' + item.type + '</div>' +
+                            '<p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">' + item.feature + '</p>' +
+                            '<div style="display: flex; gap: 8px; flex-wrap: wrap;">' +
+                                '<a href="https://www.douyin.com/search/' + encodeURIComponent(item.keyword) + '" target="_blank" class="btn-platform btn-douyin" style="padding: 6px 12px; font-size: 12px;">📱</a>' +
+                                '<a href="https://www.xiaohongshu.com/search_result?keyword=' + item.keyword + '" target="_blank" class="btn-platform btn-xiaohongshu" style="padding: 6px 12px; font-size: 12px;">📕</a>' +
+                                '<a href="https://search.bilibili.com/all?keyword=' + encodeURIComponent(item.keyword) + '" target="_blank" class="btn-platform btn-bilibili" style="padding: 6px 12px; font-size: 12px;">📺</a>' +
+                            '</div>' +
+                        '</div>';
+                    }).join('')}
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">📊 近7日收益走势（模拟）</h3>
+                        <h3 class="card-title" style="font-size: 18px;">📊 近7日收益走势（模拟）</h3>
+                        <div style="font-size: 12px; color: var(--text-muted);">数据仅供参考，不构成投资建议</div>
                     </div>
-                    <div style="height: 150px; display: flex; align-items: flex-end; justify-content: space-between; padding: 20px; background: rgba(240,245,255,0.5); border-radius: 12px;">
-                        ${[-2.5, 1.8, -0.5, 3.2, 1.5, -1.2, 2.8].map((val, i) => `
-                            <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
-                                <div style="width: 60%; height: ${Math.max(10, 50 + val * 10)}px; background: ${val >= 0 ? 'linear-gradient(180deg, var(--success) 0%, rgba(72,168,72,0.3) 100%)' : 'linear-gradient(180deg, var(--danger) 0%, rgba(217,72,72,0.3) 100%)'}; border-radius: 4px 4px 0 0; transition: height 0.5s ease;"></div>
-                                <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">${val >= 0 ? '+' : ''}${val}%</span>
-                                <span style="font-size: 11px; color: var(--text-muted);">周${['一', '二', '三', '四', '五', '六', '日'][i]}</span>
-                            </div>
-                        `).join('')}
+                    <div style="height: 180px; display: flex; align-items: flex-end; justify-content: space-between; padding: 20px; background: rgba(240,245,255,0.5); border-radius: 12px;">
+                        ${[-2.5, 1.8, -0.5, 3.2, 1.5, -1.2, 2.8].map(function(val, i) {
+                            var color = val >= 0 ? 'var(--success)' : 'var(--danger)';
+                            var bgGradient = val >= 0 ? 'linear-gradient(180deg, var(--success) 0%, rgba(72,168,72,0.3) 100%)' : 'linear-gradient(180deg, var(--danger) 0%, rgba(217,72,72,0.3) 100%)';
+                            return '<div style="flex: 1; display: flex; flex-direction: column; align-items: center;">' +
+                                '<span style="font-size: 12px; color: ' + color + '; font-weight: 500; margin-bottom: 6px;">' + (val >= 0 ? '+' : '') + val + '%</span>' +
+                                '<div style="width: 45%; height: ' + Math.max(15, 60 + val * 10) + 'px; background: ' + bgGradient + '; border-radius: 8px 8px 0 0; transition: height 0.5s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>' +
+                                '<span style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">周' + ['一', '二', '三', '四', '五', '六', '日'][i] + '</span>' +
+                            '</div>';
+                        }).join('')}
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">📝 学习总结</h3>
+                        <h3 class="card-title" style="font-size: 18px;">📝 学习笔记</h3>
+                        <span style="font-size: 12px; color: var(--text-muted);">记录您的基金学习心得和投资计划</span>
                     </div>
-                    <textarea class="text-area" id="fund-summary" placeholder="记录您的基金学习心得和投资计划..." oninput="saveFundSummary(this.value)">${summary}</textarea>
+                    <textarea class="text-area" id="fund-summary" placeholder="在这里记录您的学习心得..." oninput="saveFundSummary(this.value)" style="height: 120px; padding: 16px; border-radius: 12px;">${summary}</textarea>
                 </div>
             `;
         }
@@ -1919,41 +2003,82 @@
 
         function renderInsurancePage() {
             document.getElementById('page-insurance').innerHTML = `
-                <div class="card" style="background: linear-gradient(135deg, #f0fff5 0%, #fffcf8 100%); border: none;">
+                <div class="card" style="background: linear-gradient(135deg, #f0fff5 0%, #fffcf8 100%); border: none; padding: 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(72,168,72,0.1);">
                     <div class="card-header">
-                        <h2 class="card-title" style="font-size: 22px;">🛡️ 保险知识</h2>
-                        <button class="btn btn-primary" onclick="openMyPoliciesModal()">我的保单</button>
+                        <div>
+                            <h2 class="card-title" style="font-size: 24px; color: #48a848;">🛡️ 保险知识</h2>
+                            <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">了解保险类型，守护家庭安全</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openMyPoliciesModal()" style="padding: 10px 20px; border-radius: 10px;">📋 我的保单</button>
                     </div>
                 </div>
 
-                <div class="two-columns">
-                    <div class="card">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                    <div class="card" style="border-radius: 16px;">
                         <div class="card-header">
-                            <h3 class="card-title">🏠 家庭保险</h3>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 22px;">🏠</span>
+                                <h3 class="card-title" style="font-size: 18px;">家庭保险配置</h3>
+                            </div>
                         </div>
-                        ${insuranceTypes.map(type => `
-                            <div style="padding: 16px; border-bottom: 1px solid rgba(230,213,195,0.2);">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                    <h4 style="font-size: 15px; font-weight: 600;">${type.name}</h4>
-                                    <a href="https://www.douyin.com/search/${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 抖音</a>
-                                </div>
-                                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">${type.content}</p>
-                                <p style="font-size: 13px; color: var(--text-muted);">💡 ${type.suggestion}</p>
+                        ${insuranceTypes.map(function(type) {
+                            return '<div style="padding: 20px; border-bottom: 1px solid rgba(230,213,195,0.2);">' +
+                                '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">' +
+                                    '<h4 style="font-size: 16px; font-weight: 600; color: var(--text-primary);">' + type.name + '</h4>' +
+                                    '<div style="display: flex; gap: 6px;">' +
+                                        '<a href="https://www.douyin.com/search/' + encodeURIComponent(type.keyword) + '" target="_blank" class="btn-platform btn-douyin" style="padding: 4px 8px; font-size: 11px;">📱</a>' +
+                                        '<a href="https://www.xiaohongshu.com/search_result?keyword=' + type.keyword + '" target="_blank" class="btn-platform btn-xiaohongshu" style="padding: 4px 8px; font-size: 11px;">📕</a>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 10px;">' + type.content + '</p>' +
+                                '<div style="padding: 10px 14px; background: rgba(72,168,72,0.1); border-radius: 8px;">' +
+                                    '<p style="font-size: 13px; color: var(--success);">💡 ' + type.suggestion + '</p>' +
+                                '</div>' +
+                            '</div>';
+                        }).join('')}
+                    </div>
+
+                    <div class="card" style="border-radius: 16px;">
+                        <div class="card-header">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 22px;">📰</span>
+                                <h3 class="card-title" style="font-size: 18px;">最新政策动态</h3>
+                            </div>
+                        </div>
+                        ${insurancePolicies.map(policy => `
+                            <div style="padding: 20px; border-bottom: 1px solid rgba(230,213,195,0.2);">
+                                <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 10px; color: var(--text-primary);">${policy.title}</h4>
+                                <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">${policy.summary}</p>
+                                <a href="${policy.link}" target="_blank" class="btn-platform btn-gov" style="padding: 6px 14px; border-radius: 8px;">📄 查看详情</a>
                             </div>
                         `).join('')}
                     </div>
+                </div>
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">📰 最新政策</h3>
+                <div class="card" style="border-radius: 16px; background: linear-gradient(135deg, rgba(72,168,72,0.05) 0%, rgba(255,255,255,0.5) 100%);">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">💡</span>
+                            <h3 class="card-title" style="font-size: 18px;">保险选购小贴士</h3>
                         </div>
-                        ${insurancePolicies.map(policy => `
-                            <div style="padding: 16px; border-bottom: 1px solid rgba(230,213,195,0.2);">
-                                <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 8px;">${policy.title}</h4>
-                                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">${policy.summary}</p>
-                                <a href="${policy.link}" target="_blank" class="btn-platform btn-gov">📄 查看详情</a>
-                            </div>
-                        `).join('')}
+                    </div>
+                    <div style="padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+                        <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 28px; margin-bottom: 8px;">💰</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">先保障后理财</div>
+                        </div>
+                        <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 28px; margin-bottom: 8px;">🏥</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">医疗优先配置</div>
+                        </div>
+                        <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 28px; margin-bottom: 8px;">📋</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">仔细阅读条款</div>
+                        </div>
+                        <div style="text-align: center; padding: 16px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 28px; margin-bottom: 8px;">🎯</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">按需选择保额</div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -2035,64 +2160,78 @@
             const todayTip = dailyMakeupTips[Math.floor(Math.random() * dailyMakeupTips.length)];
 
             document.getElementById('page-makeup').innerHTML = `
-                <div class="card" style="background: linear-gradient(135deg, #fff0f5 0%, #fffcf8 100%); border: none;">
+                <div class="card" style="background: linear-gradient(135deg, #fff0f5 0%, #fffcf8 100%); border: none; padding: 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(255,150,180,0.1);">
                     <div class="card-header">
-                        <h2 class="card-title" style="font-size: 22px;">💄 化妆知识</h2>
-                        <div class="stat-card" style="background: rgba(255,255,255,0.8);">
-                            <div class="stat-value">${favorites.length}</div>
-                            <div class="stat-label">收藏技巧</div>
+                        <div>
+                            <h2 class="card-title" style="font-size: 24px; color: #ff6b9d;">💄 化妆知识</h2>
+                            <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">学习化妆技巧，打造精致妆容</p>
+                        </div>
+                        <div class="stat-card" style="background: rgba(255,255,255,0.9); padding: 16px 24px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                            <div class="stat-value" style="font-size: 28px; color: var(--pink);">${favorites.length}</div>
+                            <div class="stat-label" style="font-size: 13px;">收藏技巧</div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">🎨 化妆步骤</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">🎨</span>
+                            <h3 class="card-title" style="font-size: 18px;">化妆步骤</h3>
+                        </div>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                        ${makeupSteps.map((item, index) => `
-                            <div style="padding: 16px; background: rgba(255,240,245,0.3); border-radius: 12px;">
-                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                                    <span style="width: 24px; height: 24px; background: var(--pink); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">${index + 1}</span>
-                                    <span style="font-weight: 600; color: var(--text-primary);">${item.step}</span>
-                                </div>
-                                <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px;">${item.tip}</p>
-                                <div style="display: flex; gap: 6px;">
-                                    <a href="https://www.douyin.com/search/${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-douyin" style="font-size: 11px;">📱</a>
-                                    <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu" style="font-size: 11px;">📕</a>
-                                    <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-bilibili" style="font-size: 11px;">📺</a>
-                                </div>
-                            </div>
-                        `).join('')}
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; padding: 0 16px 16px;">
+                        ${makeupSteps.map(function(item, index) {
+                            return '<div style="padding: 20px; background: linear-gradient(135deg, rgba(255,240,245,0.4) 0%, rgba(255,255,255,0.8) 100%); border-radius: 16px; border: 1px solid rgba(255,150,180,0.2); transition: all 0.3s ease;">' +
+                                '<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">' +
+                                    '<span style="width: 28px; height: 28px; background: var(--pink); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; box-shadow: 0 2px 8px rgba(255,150,180,0.3);">' + (index + 1) + '</span>' +
+                                    '<span style="font-weight: 600; color: var(--text-primary); font-size: 15px;">' + item.step + '</span>' +
+                                '</div>' +
+                                '<p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px;">' + item.tip + '</p>' +
+                                '<div style="display: flex; gap: 6px; justify-content: center;">' +
+                                    '<a href="https://www.douyin.com/search/' + encodeURIComponent(item.keyword) + '" target="_blank" class="btn-platform btn-douyin" style="padding: 5px 10px; font-size: 11px;">📱</a>' +
+                                    '<a href="https://www.xiaohongshu.com/search_result?keyword=' + item.keyword + '" target="_blank" class="btn-platform btn-xiaohongshu" style="padding: 5px 10px; font-size: 11px;">📕</a>' +
+                                    '<a href="https://search.bilibili.com/all?keyword=' + encodeURIComponent(item.keyword) + '" target="_blank" class="btn-platform btn-bilibili" style="padding: 5px 10px; font-size: 11px;">📺</a>' +
+                                '</div>' +
+                            '</div>';
+                        }).join('')}
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px; background: linear-gradient(135deg, rgba(255,150,180,0.05) 0%, rgba(255,255,255,0.5) 100%);">
                     <div class="card-header">
-                        <h3 class="card-title">✨ 今日妆容小技巧</h3>
-                        <div style="display: flex; gap: 10px;">
-                            <button class="btn btn-sm btn-secondary" onclick="renderMakeupPage()">换一条</button>
-                            <button class="btn btn-sm btn-outline" onclick="toggleMakeupFavorite('${todayTip}')">${favorites.includes(todayTip) ? '❤️ 已收藏' : '🤍 收藏'}</button>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">✨</span>
+                            <h3 class="card-title" style="font-size: 18px;">今日妆容小技巧</h3>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-secondary" onclick="renderMakeupPage()" style="padding: 6px 12px;">🔄 换一条</button>
+                            <button class="btn btn-sm ${favorites.includes(todayTip) ? 'btn-primary' : 'btn-outline'}" onclick="toggleMakeupFavorite('${todayTip}')" style="padding: 6px 12px;">${favorites.includes(todayTip) ? '❤️ 已收藏' : '🤍 收藏'}</button>
                         </div>
                     </div>
-                    <div style="padding: 24px; background: rgba(255,245,230,0.5); border-radius: 12px;">
+                    <div style="padding: 28px; background: rgba(255,255,255,0.8); border-radius: 16px; margin: 0 16px 16px;">
                         <p style="font-size: 16px; color: var(--text-primary); line-height: 1.8;">💡 ${todayTip}</p>
                     </div>
                 </div>
 
                 ${favorites.length > 0 ? `
-                    <div class="card">
+                    <div class="card" style="border-radius: 16px; border: 2px solid rgba(255,150,180,0.3);">
                         <div class="card-header">
-                            <h3 class="card-title">❤️ 我的收藏</h3>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 22px;">❤️</span>
+                                <h3 class="card-title" style="font-size: 18px;">我的收藏</h3>
+                            </div>
                         </div>
-                        <div>
-                            ${favorites.map((tip, index) => `
-                                <div class="todo-item">
-                                    <span style="font-size: 12px; color: var(--text-muted);">${index + 1}.</span>
-                                    <span class="todo-text">${tip}</span>
-                                    <button class="btn btn-sm btn-danger" onclick="toggleMakeupFavorite('${tip}')">取消收藏</button>
-                                </div>
-                            `).join('')}
+                        <div style="padding: 0 16px 16px;">
+                            ${favorites.map(function(tip, index) {
+                                return '<div class="todo-item" style="padding: 16px; background: rgba(255,240,245,0.3); border-radius: 12px; margin-bottom: 10px;">' +
+                                    '<div style="display: flex; align-items: flex-start; gap: 10px;">' +
+                                        '<span style="font-size: 14px; color: var(--pink); font-weight: 600;">' + (index + 1) + '.</span>' +
+                                        '<span class="todo-text" style="flex: 1;">' + tip + '</span>' +
+                                    '</div>' +
+                                    '<button class="btn btn-sm btn-danger" onclick="toggleMakeupFavorite(\'' + tip + '\')" style="padding: 4px 8px;">🗑️ 取消收藏</button>' +
+                                '</div>';
+                            }).join('')}
                         </div>
                     </div>
                 ` : ''}
@@ -2262,132 +2401,149 @@
             const dailyTip = sportsTips[getDailyIndex(sportsTips)];
 
             document.getElementById('page-sports').innerHTML = `
-                <div class="card" style="background: linear-gradient(135deg, #f0fff5 0%, #fffcf8 100%); border: none;">
+                <div class="card" style="background: linear-gradient(135deg, #f0fff5 0%, #fffcf8 100%); border: none; padding: 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(72,168,72,0.1);">
                     <div class="card-header">
-                        <h2 class="card-title" style="font-size: 22px;">🏃 运动知识</h2>
+                        <div>
+                            <h2 class="card-title" style="font-size: 24px; color: #48a848;">🏃 运动知识</h2>
+                            <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">坚持运动，遇见更好的自己</p>
+                        </div>
                     </div>
                     <div style="text-align: center; padding: 20px;">
-                        <p style="font-size: 18px; color: var(--text-primary); font-weight: 500; margin-bottom: 8px;">"${quote}"</p>
-                        <p style="font-size: 14px; color: var(--text-secondary);">— 运动名言</p>
+                        <p style="font-size: 18px; color: var(--text-primary); font-weight: 500; margin-bottom: 8px; font-style: italic;">"${quote}"</p>
+                        <p style="font-size: 13px; color: var(--text-muted);">— 运动名言</p>
                     </div>
-                    <div class="highlight" style="margin: 0 20px 20px;">
-                        <p>${dailyTip.icon} <strong>${dailyTip.title}：</strong>${dailyTip.content}</p>
-                    </div>
-                </div>
-
-                <div class="stats-row">
-                    <div class="stat-card">
-                        <div class="stat-value" style="color: var(--success);">${stats.consecutiveDays}</div>
-                        <div class="stat-label">连续打卡天数</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" style="color: var(--blue);">${stats.weeklyCount}</div>
-                        <div class="stat-label">本周运动次数</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" style="color: var(--warning);">${Math.round((stats.weeklyCount / 7) * 100)}%</div>
-                        <div class="stat-label">本周完成率</div>
+                    <div class="highlight" style="margin: 0; padding: 16px; background: rgba(72,168,72,0.08); border-radius: 12px;">
+                        <p style="font-size: 14px; color: var(--text-primary);">${dailyTip.icon} <strong>${dailyTip.title}：</strong>${dailyTip.content}</p>
                     </div>
                 </div>
 
-                <div class="card">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
+                    <div class="stat-card" style="padding: 20px; background: rgba(72,168,72,0.08); border-radius: 16px; text-align: center;">
+                        <div class="stat-value" style="font-size: 32px; color: var(--success);">${stats.consecutiveDays}</div>
+                        <div class="stat-label" style="font-size: 13px; margin-top: 4px;">连续打卡天数</div>
+                    </div>
+                    <div class="stat-card" style="padding: 20px; background: rgba(80,120,200,0.08); border-radius: 16px; text-align: center;">
+                        <div class="stat-value" style="font-size: 32px; color: var(--blue);">${stats.weeklyCount}</div>
+                        <div class="stat-label" style="font-size: 13px; margin-top: 4px;">本周运动次数</div>
+                    </div>
+                    <div class="stat-card" style="padding: 20px; background: rgba(255,168,0,0.08); border-radius: 16px; text-align: center;">
+                        <div class="stat-value" style="font-size: 32px; color: var(--warning);">${Math.round((stats.weeklyCount / 7) * 100)}%</div>
+                        <div class="stat-label" style="font-size: 13px; margin-top: 4px;">本周完成率</div>
+                    </div>
+                </div>
+
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">📅 今日运动计划</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">📅</span>
+                            <h3 class="card-title" style="font-size: 18px;">今日运动计划</h3>
+                        </div>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
-                        ${sportsPlan.map(item => `
-                            <div style="padding: 16px; background: rgba(72,168,72,0.05); border-radius: 12px; border-left: 4px solid ${item.color};">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <span style="font-size: 24px;">${item.icon}</span>
-                                        <div>
-                                            <div style="font-weight: 600; color: var(--text-primary);">${item.name}</div>
-                                            <div style="font-size: 12px; color: var(--text-muted);">${item.duration}</div>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-sm btn-primary" onclick="updateSportsProgress('${item.id}')" style="background: ${item.color}; border-color: ${item.color};">打卡</button>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width: ${progress[item.id]}%; background: ${item.color};"></div>
-                                </div>
-                                <div style="text-align: right; margin-top: 4px;">
-                                    <span style="font-size: 12px; color: var(--text-muted);">${progress[item.id]}%</span>
-                                </div>
-                            </div>
-                        `).join('')}
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; padding: 0 16px 16px;">
+                        ${sportsPlan.map(function(item) {
+                            return '<div style="padding: 20px; background: linear-gradient(135deg, rgba(72,168,72,0.05) 0%, rgba(255,255,255,0.8) 100%); border-radius: 16px; border-left: 5px solid ' + item.color + '; transition: all 0.3s ease;">' +
+                                '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">' +
+                                    '<div style="display: flex; align-items: center; gap: 12px;">' +
+                                        '<span style="font-size: 32px;">' + item.icon + '</span>' +
+                                        '<div>' +
+                                            '<div style="font-weight: 600; color: var(--text-primary); font-size: 16px;">' + item.name + '</div>' +
+                                            '<div style="font-size: 13px; color: var(--text-muted);">⏱️ ' + item.duration + '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<button class="btn btn-sm btn-primary" onclick="updateSportsProgress(\'' + item.id + '\')" style="padding: 8px 16px; background: ' + item.color + '; border-color: ' + item.color + '; border-radius: 8px;">✅ 打卡</button>' +
+                                '</div>' +
+                                '<div class="progress-bar" style="height: 10px; background: rgba(0,0,0,0.05); border-radius: 5px;">' +
+                                    '<div class="progress-fill" style="width: ' + progress[item.id] + '%; background: ' + item.color + '; border-radius: 5px; transition: width 0.5s ease;"></div>' +
+                                '</div>' +
+                                '<div style="text-align: right; margin-top: 6px;">' +
+                                    '<span style="font-size: 13px; color: ' + item.color + '; font-weight: 500;">' + progress[item.id] + '%</span>' +
+                                '</div>' +
+                            '</div>';
+                        }).join('')}
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">🎬 运动教学视频</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">🎬</span>
+                            <h3 class="card-title" style="font-size: 18px;">运动教学视频</h3>
+                        </div>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; padding: 0 16px;">
                         <div style="position: relative; padding-bottom: 56.25%; border-radius: 12px; overflow: hidden; background: #000;">
-                            <iframe src="https://player.bilibili.com/player.html?aid=713585352&bvid=BV14y4y1t7Mq&cid=206047729&page=1&high_quality=1" 
+                            <iframe src="https://player.bilibili.com/player.html?aid=820330499&bvid=BV1h3411d7jF&cid=367335710&page=1&high_quality=1" 
                                 style="position: absolute; width: 100%; height: 100%;" 
                                 scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
                             </iframe>
                         </div>
                         <div style="position: relative; padding-bottom: 56.25%; border-radius: 12px; overflow: hidden; background: #000;">
-                            <iframe src="https://player.bilibili.com/player.html?aid=713585352&bvid=BV14y4y1t7Mq&cid=206047729&page=1&high_quality=1" 
+                            <iframe src="https://player.bilibili.com/player.html?aid=676534577&bvid=BV19f4y1Q7Qe&cid=281047542&page=1&high_quality=1" 
                                 style="position: absolute; width: 100%; height: 100%;" 
                                 scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
                             </iframe>
                         </div>
                     </div>
-                    <div style="display: flex; justify-content: center; gap: 12px; margin-top: 16px;">
-                        <a href="https://www.douyin.com/search/${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-douyin">📱 抖音搜索</a>
-                        <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
-                        <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-bilibili">📺 B站搜索</a>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 16px; padding-bottom: 16px; flex-wrap: wrap;">
+                        <a href="https://www.douyin.com/search/${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-douyin" style="padding: 8px 16px;">📱 抖音</a>
+                        <a href="https://www.xiaohongshu.com/search_result?keyword=居家健身教学" target="_blank" class="btn-platform btn-xiaohongshu" style="padding: 8px 16px;">📕 小红书</a>
+                        <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-bilibili" style="padding: 8px 16px;">📺 B站</a>
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">🏋️ 运动类型百科</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">🏋️</span>
+                            <h3 class="card-title" style="font-size: 18px;">运动类型百科</h3>
+                        </div>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 16px;">
-                        ${sportsTypes.map(type => `
-                            <div class="card" style="padding: 20px; border: 1px solid rgba(72,168,72,0.2);">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <span style="font-size: 28px;">${type.icon}</span>
-                                        <div>
-                                            <h4 style="font-size: 15px; font-weight: 600; color: var(--text-primary);">${type.name}</h4>
-                                            <p style="font-size: 13px; color: var(--text-muted);">${type.description}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="margin-bottom: 12px;">
-                                    <div style="font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px;">✅ 主要益处</div>
-                                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                                        ${type.benefits.map(b => `<span class="tag priority-low">${b}</span>`).join('')}
-                                    </div>
-                                </div>
-                                <div style="margin-bottom: 16px;">
-                                    <div style="font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px;">🎯 常见项目</div>
-                                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                                        ${type.examples.map(e => `<span class="tag">${e}</span>`).join('')}
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 8px;">
-                                    <a href="https://www.douyin.com/search/${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-douyin" style="font-size: 11px;">📱</a>
-                                    <a href="https://m.xiaohongshu.com/search?keyword=${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu" style="font-size: 11px;">📕</a>
-                                    <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-bilibili" style="font-size: 11px;">📺</a>
-                                </div>
-                            </div>
-                        `).join('')}
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; padding: 0 16px 16px;">
+                        ${sportsTypes.map(function(type) {
+                            var benefitsHtml = type.benefits.map(function(b) {
+                                return '<span class="tag priority-low" style="padding: 4px 10px; border-radius: 12px;">' + b + '</span>';
+                            }).join('');
+                            var examplesHtml = type.examples.map(function(e) {
+                                return '<span class="tag" style="padding: 4px 10px; border-radius: 12px;">' + e + '</span>';
+                            }).join('');
+                            return '<div class="card" style="padding: 24px; border: 1px solid rgba(72,168,72,0.2); border-radius: 16px;">' +
+                                '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">' +
+                                    '<div style="display: flex; align-items: center; gap: 12px;">' +
+                                        '<span style="font-size: 32px;">' + type.icon + '</span>' +
+                                        '<div>' +
+                                            '<h4 style="font-size: 16px; font-weight: 600; color: var(--text-primary);">' + type.name + '</h4>' +
+                                            '<p style="font-size: 13px; color: var(--text-muted);">' + type.description + '</p>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div style="margin-bottom: 14px;">' +
+                                    '<div style="font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px;">✅ 主要益处</div>' +
+                                    '<div style="display: flex; flex-wrap: wrap; gap: 6px;">' + benefitsHtml + '</div>' +
+                                '</div>' +
+                                '<div style="margin-bottom: 16px;">' +
+                                    '<div style="font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 8px;">🎯 常见项目</div>' +
+                                    '<div style="display: flex; flex-wrap: wrap; gap: 6px;">' + examplesHtml + '</div>' +
+                                '</div>' +
+                                '<div style="display: flex; gap: 6px;">' +
+                                    '<a href="https://www.douyin.com/search/' + encodeURIComponent(type.keyword) + '" target="_blank" class="btn-platform btn-douyin" style="padding: 5px 10px; font-size: 11px;">📱</a>' +
+                                    '<a href="https://www.xiaohongshu.com/search_result?keyword=' + type.keyword + '" target="_blank" class="btn-platform btn-xiaohongshu" style="padding: 5px 10px; font-size: 11px;">📕</a>' +
+                                    '<a href="https://search.bilibili.com/all?keyword=' + encodeURIComponent(type.keyword) + '" target="_blank" class="btn-platform btn-bilibili" style="padding: 5px 10px; font-size: 11px;">📺</a>' +
+                                '</div>' +
+                            '</div>';
+                        }).join('')}
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">📝 家庭运动步骤详解</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">📝</span>
+                            <h3 class="card-title" style="font-size: 18px;">家庭运动步骤详解</h3>
+                        </div>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                        <div style="padding: 20px; background: rgba(255,107,107,0.05); border-radius: 12px; border-left: 4px solid #FF6B6B;">
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🌡️ 热身运动</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; padding: 0 16px 16px;">
+                        <div style="padding: 24px; background: linear-gradient(135deg, rgba(255,107,107,0.05) 0%, rgba(255,255,255,0.8) 100%); border-radius: 16px; border-left: 5px solid #FF6B6B;">
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">🌡️ 热身运动</h4>
                             <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
                                 <li>颈部绕环：顺时针和逆时针各5圈</li>
                                 <li>肩部绕环：向前和向后各5圈</li>
@@ -2396,8 +2552,8 @@
                                 <li>脚踝绕环：顺时针和逆时针各5圈</li>
                             </ul>
                         </div>
-                        <div style="padding: 20px; background: rgba(78,205,196,0.05); border-radius: 12px; border-left: 4px solid #4ECDC4;">
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">❤️ 有氧运动</h4>
+                        <div style="padding: 24px; background: linear-gradient(135deg, rgba(78,205,196,0.05) 0%, rgba(255,255,255,0.8) 100%); border-radius: 16px; border-left: 5px solid #4ECDC4;">
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">❤️ 有氧运动</h4>
                             <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
                                 <li>原地慢跑：3分钟</li>
                                 <li>开合跳：30次</li>
@@ -2406,8 +2562,8 @@
                                 <li>平板支撑：30秒</li>
                             </ul>
                         </div>
-                        <div style="padding: 20px; background: rgba(69,183,209,0.05); border-radius: 12px; border-left: 4px solid #45B7D1;">
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">💪 力量训练</h4>
+                        <div style="padding: 24px; background: linear-gradient(135deg, rgba(69,183,209,0.05) 0%, rgba(255,255,255,0.8) 100%); border-radius: 16px; border-left: 5px solid #45B7D1;">
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">💪 力量训练</h4>
                             <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
                                 <li>俯卧撑：15次（女生可做跪姿）</li>
                                 <li>仰卧起坐：20次</li>
@@ -2416,8 +2572,8 @@
                                 <li>侧卧抬腿：每侧10次</li>
                             </ul>
                         </div>
-                        <div style="padding: 20px; background: rgba(150,206,180,0.05); border-radius: 12px; border-left: 4px solid #96CEB4;">
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🧘 拉伸放松</h4>
+                        <div style="padding: 24px; background: linear-gradient(135deg, rgba(150,206,180,0.05) 0%, rgba(255,255,255,0.8) 100%); border-radius: 16px; border-left: 5px solid #96CEB4;">
+                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">🧘 拉伸放松</h4>
                             <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
                                 <li>颈部拉伸：左右各30秒</li>
                                 <li>肩部拉伸：左右各30秒</li>
@@ -2429,25 +2585,28 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">💡 运动小贴士</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">💡</span>
+                            <h3 class="card-title" style="font-size: 18px;">运动小贴士</h3>
+                        </div>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; padding: 0 16px 16px;">
                         ${sportsTips.map(tip => `
-                            <div style="padding: 14px; background: rgba(72,168,72,0.05); border-radius: 8px; display: flex; gap: 10px;">
-                                <span style="font-size: 18px;">${tip.icon}</span>
+                            <div style="padding: 16px; background: rgba(72,168,72,0.05); border-radius: 12px; display: flex; gap: 12px; transition: all 0.3s ease;">
+                                <span style="font-size: 22px;">${tip.icon}</span>
                                 <div>
-                                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">${tip.title}</div>
-                                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">${tip.content}</div>
+                                    <div style="font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">${tip.title}</div>
+                                    <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.5;">${tip.content}</div>
                                 </div>
                             </div>
                         `).join('')}
                     </div>
                 </div>
 
-                <div class="card" style="background: linear-gradient(135deg, rgba(72,168,72,0.1) 0%, rgba(78,205,196,0.1) 100%);">
-                    <div style="text-align: center; padding: 20px;">
+                <div class="card" style="border-radius: 16px; background: linear-gradient(135deg, rgba(72,168,72,0.1) 0%, rgba(78,205,196,0.1) 100%);">
+                    <div style="text-align: center; padding: 24px;">
                         <p style="font-size: 16px; color: var(--success); font-weight: 500;">💪 ${motivation}</p>
                     </div>
                 </div>
@@ -2469,9 +2628,9 @@
 
         // ==================== 练字字帖模块 ====================
         const calligraphyFonts = [
-            { name: '正楷', sample: '永字八法：点、横、竖、撇、捺、折、钩、提。正楷字体端庄稳重，笔画清晰有力，适合初学者。', keyword: '正楷字帖' },
-            { name: '行楷', sample: '行楷介于楷书和行书之间，笔画流畅自然，既有楷书的工整，又有行书的灵动。书写时注意笔画的连贯和呼应。', keyword: '行楷字帖' },
-            { name: '隶书', sample: '隶书是汉字书法中重要的字体之一，笔画蚕头燕尾，古朴典雅。书写时注意横画的波磔和结构的扁平。', keyword: '隶书字帖' }
+            { name: '正楷', description: '端庄稳重，适合初学', sample: '永字八法：点、横、竖、撇、捺、折、钩、提。正楷字体端庄稳重，笔画清晰有力，适合初学者。', keyword: '正楷字帖' },
+            { name: '行楷', description: '流畅自然，兼顾工整', sample: '行楷介于楷书和行书之间，笔画流畅自然，既有楷书的工整，又有行书的灵动。书写时注意笔画的连贯和呼应。', keyword: '行楷字帖' },
+            { name: '隶书', description: '古朴典雅，蚕头燕尾', sample: '隶书是汉字书法中重要的字体之一，笔画蚕头燕尾，古朴典雅。书写时注意横画的波磔和结构的扁平。', keyword: '隶书字帖' }
         ];
 
         const calligraphyQuotes = [
@@ -2537,38 +2696,74 @@
             const dailyTip = calligraphyTips[getDailyIndex(calligraphyTips)];
 
             document.getElementById('page-calligraphy').innerHTML = `
-                <div class="card" style="background: linear-gradient(135deg, #fffef0 0%, #fffcf8 100%); border: none;">
+                <div class="card" style="background: linear-gradient(135deg, #fffef0 0%, #fffcf8 100%); border: none; padding: 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(200,180,100,0.1);">
                     <div class="card-header">
-                        <h2 class="card-title" style="font-size: 22px;">✍️ 练字字帖</h2>
+                        <div>
+                            <h2 class="card-title" style="font-size: 24px; color: #b8860b;">✍️ 练字字帖</h2>
+                            <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">静心练字，修身养性</p>
+                        </div>
                     </div>
                     <div style="text-align: center; padding: 20px;">
-                        <p style="font-size: 16px; color: var(--text-primary); font-weight: 500; margin-bottom: 8px;">"${dailyQuote}"</p>
-                        <p style="font-size: 14px; color: var(--text-secondary);">— 书法名言</p>
+                        <p style="font-size: 18px; color: var(--text-primary); font-weight: 500; margin-bottom: 8px; font-style: italic; font-family: 'KaiTi', 'STKaiti', serif;">"${dailyQuote}"</p>
+                        <p style="font-size: 13px; color: var(--text-muted);">— 书法名言</p>
                     </div>
-                    <div class="highlight" style="margin: 0 20px 20px;">
-                        <p>💡 <strong>今日练习建议：</strong>${dailyTip}</p>
+                    <div class="highlight" style="margin: 0; padding: 16px; background: rgba(200,180,100,0.08); border-radius: 12px;">
+                        <p style="font-size: 14px; color: var(--text-primary);">💡 <strong>今日练习建议：</strong>${dailyTip}</p>
                     </div>
                 </div>
 
-                <div class="three-columns">
-                    ${calligraphyFonts.map(font => `
-                        <div class="card">
-                            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; text-align: center; color: var(--text-primary);">${font.name}</h4>
-                            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${font.sample}</p>
-                            <div style="display: flex; gap: 8px;">
-                                <button class="btn btn-primary" onclick="printCalligraphy('${font.name}')" style="flex: 1;">打印临摹</button>
-                                <a href="https://www.baidu.com/s?wd=${encodeURIComponent(font.keyword)}" target="_blank" class="btn-platform btn-baidu">🔍 搜索</a>
-                            </div>
-                        </div>
-                    `).join('')}
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                    ${calligraphyFonts.map(function(font) {
+                        return '<div class="card" style="padding: 24px; border-radius: 16px; border: 1px solid rgba(200,180,100,0.2); background: linear-gradient(135deg, rgba(255,250,200,0.05) 0%, rgba(255,255,255,0.8) 100%);">' +
+                            '<div style="text-align: center; margin-bottom: 16px;">' +
+                                '<h4 style="font-size: 18px; font-weight: 600; color: #b8860b;">' + font.name + '</h4>' +
+                                '<span style="font-size: 12px; color: var(--text-muted);">' + font.description + '</span>' +
+                            '</div>' +
+                            '<p style="font-size: 16px; color: var(--text-primary); line-height: 1.8; margin-bottom: 16px; font-family: KaiTi, STKaiti, serif; text-align: center; padding: 16px; background: rgba(255,255,255,0.6); border-radius: 12px;">' + font.sample + '</p>' +
+                            '<div style="display: flex; gap: 10px;">' +
+                                '<button class="btn btn-primary" onclick="printCalligraphy(\'' + font.name + '\')" style="flex: 1; padding: 10px; border-radius: 10px; background: #b8860b; border-color: #b8860b;">🖨️ 打印临摹</button>' +
+                                '<a href="https://www.baidu.com/s?wd=' + encodeURIComponent(font.keyword) + '" target="_blank" class="btn-platform btn-baidu" style="padding: 10px; border-radius: 10px;">🔍</a>' +
+                            '</div>' +
+                        '</div>';
+                    }).join('')}
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">📝 田字格练习区</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">📝</span>
+                            <h3 class="card-title" style="font-size: 18px;">田字格练习区</h3>
+                        </div>
                     </div>
-                    <div id="tian-zi-ge" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #ccc; padding: 1px; border-radius: 8px; max-width: 320px; margin: 0 auto; cursor: pointer;" onclick="showCalligraphyTip()"></div>
-                    <p style="text-align: center; margin-top: 12px; font-size: 14px; color: var(--text-secondary);">点击田字格查看提示</p>
+                    <div id="tian-zi-ge" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: #ccc; padding: 1px; border-radius: 12px; max-width: 340px; margin: 0 auto; cursor: pointer;" onclick="showCalligraphyTip()"></div>
+                    <p style="text-align: center; margin-top: 16px; font-size: 14px; color: var(--text-secondary);">👆 点击田字格查看练习提示</p>
+                </div>
+
+                <div class="card" style="border-radius: 16px; background: linear-gradient(135deg, rgba(200,180,100,0.05) 0%, rgba(255,255,255,0.5) 100%);">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">💡</span>
+                            <h3 class="card-title" style="font-size: 18px;">练字小贴士</h3>
+                        </div>
+                    </div>
+                    <div style="padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
+                        <div style="text-align: center; padding: 14px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 24px; margin-bottom: 6px;">🎯</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">先观察字形结构</div>
+                        </div>
+                        <div style="text-align: center; padding: 14px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 24px; margin-bottom: 6px;">✏️</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">注意笔画顺序</div>
+                        </div>
+                        <div style="text-align: center; padding: 14px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 24px; margin-bottom: 6px;">⏱️</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">控制书写速度</div>
+                        </div>
+                        <div style="text-align: center; padding: 14px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 24px; margin-bottom: 6px;">🧘</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">保持坐姿端正</div>
+                        </div>
+                    </div>
                 </div>
             `;
             renderTianZiGe();
@@ -2588,61 +2783,106 @@
             const todos = getTodos();
             const completedCount = todos.filter(t => t.completed).length;
             const incompleteCount = todos.filter(t => !t.completed).length;
+            const totalCount = todos.length;
+            const completionRate = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
             const review = getStore('daily_review', '');
             const reviewOptions = getStore('review_options', {});
 
             document.getElementById('page-review').innerHTML = `
-                <div class="card" style="background: linear-gradient(135deg, #f5f0ff 0%, #fffcf8 100%); border: none;">
+                <div class="card" style="background: linear-gradient(135deg, #f5f0ff 0%, #fffcf8 100%); border: none; padding: 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(150,100,200,0.1);">
                     <div class="card-header">
-                        <h2 class="card-title" style="font-size: 22px;">🔄 每日复盘</h2>
-                        <div style="display: flex; gap: 20px;">
-                            <div class="stat-card" style="background: rgba(255,255,255,0.8);">
-                                <div class="stat-value" style="color: var(--success);">${completedCount}</div>
-                                <div class="stat-label">已完成</div>
-                            </div>
-                            <div class="stat-card" style="background: rgba(255,255,255,0.8);">
-                                <div class="stat-value" style="color: var(--danger);">${incompleteCount}</div>
-                                <div class="stat-label">未完成</div>
-                            </div>
+                        <div>
+                            <h2 class="card-title" style="font-size: 24px; color: #6b4c9a;">🔄 每日复盘</h2>
+                            <p style="font-size: 14px; color: var(--text-secondary); margin-top: 4px;">反思今日，规划明日</p>
                         </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; margin-top: 20px;">
+                        <div class="stat-card" style="background: rgba(255,255,255,0.9); padding: 18px; border-radius: 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                            <div class="stat-value" style="font-size: 28px; color: var(--success);">${completedCount}</div>
+                            <div class="stat-label" style="font-size: 13px;">✅ 已完成</div>
+                        </div>
+                        <div class="stat-card" style="background: rgba(255,255,255,0.9); padding: 18px; border-radius: 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                            <div class="stat-value" style="font-size: 28px; color: var(--danger);">${incompleteCount}</div>
+                            <div class="stat-label" style="font-size: 13px;">❌ 未完成</div>
+                        </div>
+                        <div class="stat-card" style="background: rgba(255,255,255,0.9); padding: 18px; border-radius: 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                            <div class="stat-value" style="font-size: 28px; color: var(--purple);">${completionRate}%</div>
+                            <div class="stat-label" style="font-size: 13px;">📊 完成率</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar" style="height: 12px; background: rgba(255,255,255,0.6); border-radius: 6px; margin-top: 20px;">
+                        <div class="progress-fill" style="width: ${completionRate}%; background: var(--purple); border-radius: 6px;"></div>
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">📝 任务反思</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">📝</span>
+                            <h3 class="card-title" style="font-size: 18px;">任务反思</h3>
+                        </div>
                     </div>
-                    <div>
+                    <div style="padding: 0 16px 16px;">
                         ${todos.length > 0 ? todos.map(todo => `
-                            <div class="todo-item" ${todo.completed ? 'style="opacity: 0.6;"' : ''}>
-                                <input type="checkbox" ${todo.completed ? 'checked disabled' : ''}>
-                                <span class="todo-text">${todo.text}</span>
-                                <div style="display: flex; gap: 8px;">
-                                    <select class="select" style="width: auto; padding: 4px 8px; font-size: 12px;" onchange="saveReviewOption(${todo.id}, 'rating', this.value)">
-                                        <option value="">专注度评分</option>
+                            <div class="todo-item" style="padding: 16px; background: rgba(150,100,200,0.05); border-radius: 12px; margin-bottom: 10px; ${todo.completed ? 'opacity: 0.6;' : ''}">
+                                <input type="checkbox" ${todo.completed ? 'checked disabled' : ''} style="width: 18px; height: 18px;">
+                                <span class="todo-text" style="font-size: 15px;">${todo.text}</span>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <select class="select" style="width: auto; padding: 6px 10px; font-size: 12px; border-radius: 8px;" onchange="saveReviewOption(${todo.id}, 'rating', this.value)">
+                                        <option value="">⭐ 专注度评分</option>
                                         <option value="5" ${reviewOptions[todo.id]?.rating === '5' ? 'selected' : ''}>⭐⭐⭐⭐⭐</option>
                                         <option value="4" ${reviewOptions[todo.id]?.rating === '4' ? 'selected' : ''}>⭐⭐⭐⭐</option>
                                         <option value="3" ${reviewOptions[todo.id]?.rating === '3' ? 'selected' : ''}>⭐⭐⭐</option>
                                         <option value="2" ${reviewOptions[todo.id]?.rating === '2' ? 'selected' : ''}>⭐⭐</option>
                                         <option value="1" ${reviewOptions[todo.id]?.rating === '1' ? 'selected' : ''}>⭐</option>
                                     </select>
-                                    <select class="select" style="width: auto; padding: 4px 8px; font-size: 12px;" onchange="saveReviewOption(${todo.id}, 'status', this.value)">
-                                        <option value="">状态</option>
-                                        <option value="good" ${reviewOptions[todo.id]?.status === 'good' ? 'selected' : ''}>做得很好</option>
-                                        <option value="improve" ${reviewOptions[todo.id]?.status === 'improve' ? 'selected' : ''}>需要改进</option>
-                                        <option value="continue" ${reviewOptions[todo.id]?.status === 'continue' ? 'selected' : ''}>明日继续</option>
+                                    <select class="select" style="width: auto; padding: 6px 10px; font-size: 12px; border-radius: 8px;" onchange="saveReviewOption(${todo.id}, 'status', this.value)">
+                                        <option value="">📋 状态</option>
+                                        <option value="good" ${reviewOptions[todo.id]?.status === 'good' ? 'selected' : ''}>✅ 做得很好</option>
+                                        <option value="improve" ${reviewOptions[todo.id]?.status === 'improve' ? 'selected' : ''}>🔧 需要改进</option>
+                                        <option value="continue" ${reviewOptions[todo.id]?.status === 'continue' ? '' : ''}>⏭️ 明日继续</option>
                                     </select>
                                 </div>
                             </div>
-                        `).join('') : '<p style="text-align: center; color: var(--text-muted); padding: 20px;">暂无待办事项可复盘</p>'}
+                        `).join('') : '<div style="text-align: center; color: var(--text-muted); padding: 30px; font-size: 14px;">暂无待办事项可复盘</div>'}
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" style="border-radius: 16px;">
                     <div class="card-header">
-                        <h3 class="card-title">📊 今日总结</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">📊</span>
+                            <h3 class="card-title" style="font-size: 18px;">今日总结</h3>
+                        </div>
                     </div>
-                    <textarea class="text-area" id="daily-review" placeholder="总结今日的收获、不足和明日计划..." oninput="saveReview(this.value)">${review}</textarea>
+                    <textarea class="text-area" id="daily-review" placeholder="今日收获：\n\n今日不足：\n\n明日计划：" oninput="saveReview(this.value)" style="height: 150px; padding: 16px; border-radius: 12px;">${review}</textarea>
+                </div>
+
+                <div class="card" style="border-radius: 16px; background: linear-gradient(135deg, rgba(150,100,200,0.05) 0%, rgba(255,255,255,0.5) 100%);">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">💡</span>
+                            <h3 class="card-title" style="font-size: 18px;">复盘小贴士</h3>
+                        </div>
+                    </div>
+                    <div style="padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
+                        <div style="text-align: center; padding: 14px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 24px; margin-bottom: 6px;">🎯</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">回顾目标完成情况</div>
+                        </div>
+                        <div style="text-align: center; padding: 14px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 24px; margin-bottom: 6px;">✅</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">总结成功经验</div>
+                        </div>
+                        <div style="text-align: center; padding: 14px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 24px; margin-bottom: 6px;">❌</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">分析失败原因</div>
+                        </div>
+                        <div style="text-align: center; padding: 14px; background: rgba(255,255,255,0.8); border-radius: 12px;">
+                            <div style="font-size: 24px; margin-bottom: 6px;">📅</div>
+                            <div style="font-size: 13px; color: var(--text-secondary);">制定改进计划</div>
+                        </div>
+                    </div>
                 </div>
             `;
         }
