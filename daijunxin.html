@@ -724,6 +724,8 @@
         <div class="sidebar-header">
             <h1>✨ 戴俊欣工作台</h1>
             <p>效率工具，助力成长</p>
+            <button class="btn btn-sm btn-primary" onclick="refreshDailyContent()" style="margin-top: 12px; width: 100%;">🔄 刷新每日内容</button>
+            <p id="last-refresh-time" style="font-size: 11px; color: var(--text-muted); margin-top: 8px;"></p>
         </div>
         <ul class="menu-list" id="menu-list"></ul>
     </div>
@@ -782,6 +784,35 @@
         function formatDate(date) {
             const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
             return date.toLocaleDateString('zh-CN', options);
+        }
+
+        function getDailySeed() {
+            const today = new Date();
+            return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+        }
+
+        function getDailyIndex(array) {
+            return getDailySeed() % array.length;
+        }
+
+        function refreshDailyContent() {
+            setStore('last_refresh_date', new Date().toLocaleString());
+            document.getElementById('last-refresh-time').textContent = '上次刷新：' + getLastRefreshTime();
+            renderTodoPage();
+            renderTeachingPage();
+            renderNovelPage();
+            renderDrivePage();
+            renderFundPage();
+            renderInsurancePage();
+            renderMakeupPage();
+            renderSportsPage();
+            renderCalligraphyPage();
+            renderReviewPage();
+            alert('✓ 每日内容已刷新！');
+        }
+
+        function getLastRefreshTime() {
+            return getStore('last_refresh_date', '尚未刷新');
         }
 
         function initMenu() {
@@ -1201,17 +1232,69 @@
             renderTeachingPage();
         }
 
-        const teachingTips = [
-            { id: 1, title: '课堂管理技巧', content: '建立明确的课堂规则，让学生知道什么是可以接受的行为，什么是不可以接受的。规则要简洁明了，易于理解。', keyword: '课堂管理技巧' },
-            { id: 2, title: '家校沟通策略', content: '定期与家长沟通学生的学习情况，不仅要报告问题，也要分享学生的进步。积极的反馈能增强家长的信任感。', keyword: '家校沟通策略' },
-            { id: 3, title: '激发学习兴趣', content: '利用多样化的教学方法，如游戏化学习、小组合作等，激发学生的学习兴趣和主动性。', keyword: '激发学习兴趣' }
+        const teachingTipsSets = [
+            [
+                { id: 1, title: '课堂管理技巧', content: '建立明确的课堂规则，让学生知道什么是可以接受的行为，什么是不可以接受的。规则要简洁明了，易于理解。', keyword: '课堂管理技巧' },
+                { id: 2, title: '家校沟通策略', content: '定期与家长沟通学生的学习情况，不仅要报告问题，也要分享学生的进步。积极的反馈能增强家长的信任感。', keyword: '家校沟通策略' },
+                { id: 3, title: '激发学习兴趣', content: '利用多样化的教学方法，如游戏化学习、小组合作等，激发学生的学习兴趣和主动性。', keyword: '激发学习兴趣' }
+            ],
+            [
+                { id: 4, title: '课堂提问技巧', content: '设计有效的问题，引导学生思考。问题要有层次，从基础到深入，鼓励学生积极参与课堂互动。', keyword: '课堂提问技巧' },
+                { id: 5, title: '学生评价方法', content: '采用多元化评价方式，不仅关注成绩，更要重视学生的学习过程和进步。建立成长档案记录学生的点滴进步。', keyword: '学生评价方法' },
+                { id: 6, title: '课堂时间管理', content: '合理安排课堂时间，保证教学进度。课前准备充分，课中灵活调整，课后及时总结反思。', keyword: '课堂时间管理' }
+            ],
+            [
+                { id: 7, title: '差异化教学', content: '根据学生的不同水平和需求，设计差异化的教学方案。关注每个学生的特点，因材施教。', keyword: '差异化教学' },
+                { id: 8, title: '班级文化建设', content: '营造积极向上的班级文化，培养学生的集体荣誉感。定期组织班级活动，增强班级凝聚力。', keyword: '班级文化建设' },
+                { id: 9, title: '教学反思', content: '课后及时反思教学过程，总结经验教训。通过反思不断改进教学方法，提高教学质量。', keyword: '教学反思' }
+            ],
+            [
+                { id: 10, title: '作业设计策略', content: '作业设计要科学合理，既能巩固知识又不增加学生负担。分层作业满足不同学生的需求。', keyword: '作业设计策略' },
+                { id: 11, title: '课堂激励方法', content: '及时表扬学生的进步，用激励激发学习动力。多样化的激励方式，让每个学生都能感受到被关注。', keyword: '课堂激励方法' },
+                { id: 12, title: '信息技术应用', content: '合理运用信息技术辅助教学，提高课堂效率。注意技术与教学的融合，避免过度依赖。', keyword: '信息技术教学应用' }
+            ],
+            [
+                { id: 13, title: '阅读教学技巧', content: '培养学生的阅读兴趣和能力，引导深度阅读。通过提问和讨论，帮助学生理解文本内涵。', keyword: '阅读教学技巧' },
+                { id: 14, title: '写作教学策略', content: '循序渐进地培养写作能力，从片段到整篇。提供丰富的写作素材，激发创作灵感。', keyword: '写作教学策略' },
+                { id: 15, title: '合作学习组织', content: '有效组织小组合作学习，明确分工，培养团队协作能力。教师要适时指导，确保合作效果。', keyword: '合作学习组织' }
+            ]
         ];
 
-        const teachingResources = [
-            { id: 1, title: '核心素养导向的教案设计', keyword: '核心素养导向的教案设计' },
-            { id: 2, title: '青年教师赛课指南', keyword: '青年教师赛课指南' },
-            { id: 3, title: '微课制作技巧', keyword: '微课制作技巧' }
+        const teachingResourcesSets = [
+            [
+                { id: 1, title: '核心素养导向的教案设计', keyword: '核心素养导向的教案设计' },
+                { id: 2, title: '青年教师赛课指南', keyword: '青年教师赛课指南' },
+                { id: 3, title: '微课制作技巧', keyword: '微课制作技巧' }
+            ],
+            [
+                { id: 4, title: '新课程标准解读', keyword: '新课程标准解读' },
+                { id: 5, title: '项目式学习设计', keyword: '项目式学习设计' },
+                { id: 6, title: '教育信息化应用', keyword: '教育信息化应用' }
+            ],
+            [
+                { id: 7, title: '课堂观察与评价', keyword: '课堂观察与评价' },
+                { id: 8, title: '校本课程开发', keyword: '校本课程开发' },
+                { id: 9, title: '家校共育实践', keyword: '家校共育实践' }
+            ],
+            [
+                { id: 10, title: 'STEM教育实践', keyword: 'STEM教育实践' },
+                { id: 11, title: '跨学科教学研究', keyword: '跨学科教学研究' },
+                { id: 12, title: '教育评价改革', keyword: '教育评价改革' }
+            ],
+            [
+                { id: 13, title: '教育科研方法', keyword: '教育科研方法' },
+                { id: 14, title: '教师专业发展', keyword: '教师专业发展' },
+                { id: 15, title: '教育心理学应用', keyword: '教育心理学应用' }
+            ]
         ];
+
+        function getDailyTeachingTips() {
+            return teachingTipsSets[getDailyIndex(teachingTipsSets)];
+        }
+
+        function getDailyTeachingResources() {
+            return teachingResourcesSets[getDailyIndex(teachingResourcesSets)];
+        }
 
         function renderTeachingPage() {
             const plans = getTeachingPlans();
@@ -1257,13 +1340,13 @@
 
                     <div id="teaching-tab-tips" class="tab-content">
                         <div class="three-columns">
-                            ${teachingTips.map(tip => `
+                            ${getDailyTeachingTips().map(tip => `
                                 <div class="card" style="padding: 20px;">
                                     <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">${tip.title}</h4>
                                     <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${tip.content}</p>
                                     <div style="display: flex; gap: 8px;">
                                         <a href="https://www.douyin.com/search/${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 抖音</a>
-                                        <a href="https://www.xiaohongshu.com/search?q=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书</a>
+                                        <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书</a>
                                         <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-bilibili">📺 B站</a>
                                     </div>
                                 </div>
@@ -1273,11 +1356,11 @@
 
                     <div id="teaching-tab-resources" class="tab-content">
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
-                            ${teachingResources.map(res => `
+                            ${getDailyTeachingResources().map(res => `
                                 <div class="card" style="padding: 20px;">
                                     <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">${res.title}</h4>
                                     <div style="display: flex; gap: 8px;">
-                                        <a href="https://kns.cnki.net/kns8/defaultresult/index?q=${encodeURIComponent(res.keyword)}" target="_blank" class="btn-platform btn-cnki">📚 知网搜索</a>
+                                        <a href="https://www.baidu.com/s?wd=site:kns.cnki.net+${encodeURIComponent(res.keyword)}" target="_blank" class="btn-platform btn-cnki">📚 知网搜索</a>
                                         <a href="https://basic.smartedu.cn/search?q=${encodeURIComponent(res.keyword)}" target="_blank" class="btn-platform btn-gov">🎓 国家平台</a>
                                     </div>
                                 </div>
@@ -1296,40 +1379,95 @@
         }
 
         // ==================== 小说拆解模块 ====================
-        const jjwxcRanking = [
-            { rank: 1, title: '长月烬明', author: '藤萝为枝', type: '古言仙侠', tags: ['仙侠', '虐恋', 'HE'], status: '连载中', popularity: '1500万', link: 'https://www.jjwxc.net/onebook.php?novelid=4496403' },
-            { rank: 2, title: '错撩', author: '翘摇', type: '现代言情', tags: ['豪门', '甜宠', '先婚后爱'], status: '已完结', popularity: '1200万', link: 'https://www.jjwxc.net/onebook.php?novelid=4071306' },
-            { rank: 3, title: '偷偷藏不住', author: '竹已', type: '现代言情', tags: ['校园', '暗恋', '甜宠'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=3624305' },
-            { rank: 4, title: '白日梦我', author: '栖见', type: '现代言情', tags: ['校园', '青春', '治愈'], status: '已完结', popularity: '900万', link: 'https://www.jjwxc.net/onebook.php?novelid=3453198' },
-            { rank: 5, title: '当我飞奔向你', author: '竹已', type: '现代言情', tags: ['校园', '甜宠', '青梅竹马'], status: '已完结', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=3588905' },
-            { rank: 6, title: '折月亮', author: '竹已', type: '现代言情', tags: ['都市', '治愈', '成长'], status: '连载中', popularity: '700万', link: 'https://www.jjwxc.net/onebook.php?novelid=4256666' },
-            { rank: 7, title: '神明今夜想你', author: '藤萝为枝', type: '现代言情', tags: ['治愈', '救赎', '甜宠'], status: '已完结', popularity: '650万', link: 'https://www.jjwxc.net/onebook.php?novelid=3775728' },
-            { rank: 8, title: '偏偏宠爱', author: '藤萝为枝', type: '现代言情', tags: ['校园', '重生', '甜宠'], status: '已完结', popularity: '600万', link: 'https://www.jjwxc.net/onebook.php?novelid=3250045' },
-            { rank: 9, title: '深渊女神', author: '藤萝为枝', type: '现代言情', tags: ['悬疑', '治愈', '甜宠'], status: '已完结', popularity: '550万', link: 'https://www.jjwxc.net/onebook.php?novelid=3343640' },
-            { rank: 10, title: '告白', author: '应橙', type: '现代言情', tags: ['都市', '暗恋', '治愈'], status: '连载中', popularity: '500万', link: 'https://www.jjwxc.net/onebook.php?novelid=4327836' }
+        const jjwxcRankingSets = [
+            [
+                { rank: 1, title: '长月烬明', author: '藤萝为枝', type: '古言仙侠', tags: ['仙侠', '虐恋', 'HE'], status: '连载中', popularity: '1500万', link: 'https://www.jjwxc.net/onebook.php?novelid=4496403' },
+                { rank: 2, title: '错撩', author: '翘摇', type: '现代言情', tags: ['豪门', '甜宠', '先婚后爱'], status: '已完结', popularity: '1200万', link: 'https://www.jjwxc.net/onebook.php?novelid=4071306' },
+                { rank: 3, title: '偷偷藏不住', author: '竹已', type: '现代言情', tags: ['校园', '暗恋', '甜宠'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=3624305' },
+                { rank: 4, title: '白日梦我', author: '栖见', type: '现代言情', tags: ['校园', '青春', '治愈'], status: '已完结', popularity: '900万', link: 'https://www.jjwxc.net/onebook.php?novelid=3453198' },
+                { rank: 5, title: '当我飞奔向你', author: '竹已', type: '现代言情', tags: ['校园', '甜宠', '青梅竹马'], status: '已完结', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=3588905' },
+                { rank: 6, title: '折月亮', author: '竹已', type: '现代言情', tags: ['都市', '治愈', '成长'], status: '连载中', popularity: '700万', link: 'https://www.jjwxc.net/onebook.php?novelid=4256666' },
+                { rank: 7, title: '神明今夜想你', author: '藤萝为枝', type: '现代言情', tags: ['治愈', '救赎', '甜宠'], status: '已完结', popularity: '650万', link: 'https://www.jjwxc.net/onebook.php?novelid=3775728' },
+                { rank: 8, title: '偏偏宠爱', author: '藤萝为枝', type: '现代言情', tags: ['校园', '重生', '甜宠'], status: '已完结', popularity: '600万', link: 'https://www.jjwxc.net/onebook.php?novelid=3250045' },
+                { rank: 9, title: '深渊女神', author: '藤萝为枝', type: '现代言情', tags: ['悬疑', '治愈', '甜宠'], status: '已完结', popularity: '550万', link: 'https://www.jjwxc.net/onebook.php?novelid=3343640' },
+                { rank: 10, title: '告白', author: '应橙', type: '现代言情', tags: ['都市', '暗恋', '治愈'], status: '连载中', popularity: '500万', link: 'https://www.jjwxc.net/onebook.php?novelid=4327836' }
+            ],
+            [
+                { rank: 1, title: '难哄', author: '竹已', type: '现代言情', tags: ['都市', '治愈', '破镜重圆'], status: '已完结', popularity: '1800万', link: 'https://www.jjwxc.net/onebook.php?novelid=4205000' },
+                { rank: 2, title: '宁安如梦', author: '时镜', type: '古言重生', tags: ['重生', '宫斗', '权谋'], status: '已完结', popularity: '1300万', link: 'https://www.jjwxc.net/onebook.php?novelid=3954300' },
+                { rank: 3, title: '赴京', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '连载中', popularity: '1100万', link: 'https://www.jjwxc.net/onebook.php?novelid=4500000' },
+                { rank: 4, title: '重生之将门毒后', author: '千山茶客', type: '古言重生', tags: ['重生', '宅斗', '权谋'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=2632856' },
+                { rank: 5, title: '嫡谋', author: '面北眉南', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '950万', link: 'https://www.jjwxc.net/onebook.php?novelid=2200375' },
+                { rank: 6, title: '锦桐', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '850万', link: 'https://www.jjwxc.net/onebook.php?novelid=2732372' },
+                { rank: 7, title: '掌中之物', author: '贝昕', type: '现代言情', tags: ['悬疑', '虐恋', '复仇'], status: '已完结', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=2515144' },
+                { rank: 8, title: '星落凝成糖', author: '一度君华', type: '古言仙侠', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '750万', link: 'https://www.jjwxc.net/onebook.php?novelid=3000000' },
+                { rank: 9, title: '惜花芷', author: '空留', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '连载中', popularity: '700万', link: 'https://www.jjwxc.net/onebook.php?novelid=4400000' },
+                { rank: 10, title: '玉茗茶骨', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '连载中', popularity: '650万', link: 'https://www.jjwxc.net/onebook.php?novelid=4450000' }
+            ],
+            [
+                { rank: 1, title: '一念关山', author: '沐非', type: '古言武侠', tags: ['武侠', '权谋', '强强'], status: '连载中', popularity: '1600万', link: 'https://www.jjwxc.net/onebook.php?novelid=4380000' },
+                { rank: 2, title: '九重紫', author: '吱吱', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '1400万', link: 'https://www.jjwxc.net/onebook.php?novelid=3400000' },
+                { rank: 3, title: '花琉璃轶闻', author: '月下蝶影', type: '古言甜宠', tags: ['古言', '甜宠', '宫斗'], status: '已完结', popularity: '1100万', link: 'https://www.jjwxc.net/onebook.php?novelid=3500000' },
+                { rank: 4, title: '长相思', author: '桐华', type: '古言仙侠', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=3200000' },
+                { rank: 5, title: '步步惊心', author: '桐华', type: '古言穿越', tags: ['穿越', '宫斗', '虐恋'], status: '已完结', popularity: '900万', link: 'https://www.jjwxc.net/onebook.php?novelid=1000000' },
+                { rank: 6, title: '庶女有毒', author: '秦简', type: '古言宅斗', tags: ['宅斗', '重生', '复仇'], status: '已完结', popularity: '850万', link: 'https://www.jjwxc.net/onebook.php?novelid=1800000' },
+                { rank: 7, title: '凤囚凰', author: '天衣有风', type: '古言穿越', tags: ['穿越', '权谋', '虐恋'], status: '已完结', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=1500000' },
+                { rank: 8, title: '东宫', author: '匪我思存', type: '古言虐恋', tags: ['古言', '虐恋', '悲剧'], status: '已完结', popularity: '750万', link: 'https://www.jjwxc.net/onebook.php?novelid=1200000' },
+                { rank: 9, title: '琉璃美人煞', author: '十四郎', type: '古言仙侠', tags: ['仙侠', '甜宠', '奇幻'], status: '已完结', popularity: '700万', link: 'https://www.jjwxc.net/onebook.php?novelid=800000' },
+                { rank: 10, title: '三生三世十里桃花', author: '唐七', type: '古言仙侠', tags: ['仙侠', '虐恋', '神话'], status: '已完结', popularity: '650万', link: 'https://www.jjwxc.net/onebook.php?novelid=600000' }
+            ],
+            [
+                { rank: 1, title: '狂飙', author: '徐纪周', type: '现代悬疑', tags: ['悬疑', '刑侦', '扫黑'], status: '已完结', popularity: '2000万', link: 'https://www.jjwxc.net/onebook.php?novelid=4480000' },
+                { rank: 2, title: '琅琊榜', author: '海宴', type: '古言权谋', tags: ['权谋', '复仇', '友情'], status: '已完结', popularity: '1500万', link: 'https://www.jjwxc.net/onebook.php?novelid=500000' },
+                { rank: 3, title: '伪装者', author: '张勇', type: '民国谍战', tags: ['谍战', '悬疑', '家庭'], status: '已完结', popularity: '1300万', link: 'https://www.jjwxc.net/onebook.php?novelid=700000' },
+                { rank: 4, title: '庆余年', author: '猫腻', type: '玄幻穿越', tags: ['穿越', '权谋', '玄幻'], status: '连载中', popularity: '1200万', link: 'https://www.jjwxc.net/onebook.php?novelid=400000' },
+                { rank: 5, title: '雪中悍刀行', author: '烽火戏诸侯', type: '玄幻武侠', tags: ['武侠', '玄幻', '江湖'], status: '已完结', popularity: '1100万', link: 'https://www.jjwxc.net/onebook.php?novelid=300000' },
+                { rank: 6, title: '凡人修仙传', author: '忘语', type: '玄幻修真', tags: ['修真', '升级', '玄幻'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=200000' },
+                { rank: 7, title: '斗破苍穹', author: '天蚕土豆', type: '玄幻升级', tags: ['升级', '玄幻', '热血'], status: '已完结', popularity: '950万', link: 'https://www.jjwxc.net/onebook.php?novelid=180000' },
+                { rank: 8, title: '斗罗大陆', author: '唐家三少', type: '玄幻奇幻', tags: ['奇幻', '升级', '热血'], status: '已完结', popularity: '900万', link: 'https://www.jjwxc.net/onebook.php?novelid=150000' },
+                { rank: 9, title: '全职高手', author: '蝴蝶蓝', type: '游戏竞技', tags: ['游戏', '竞技', '热血'], status: '已完结', popularity: '850万', link: 'https://www.jjwxc.net/onebook.php?novelid=120000' },
+                { rank: 10, title: '盗墓笔记', author: '南派三叔', type: '悬疑探险', tags: ['悬疑', '探险', '盗墓'], status: '已完结', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=100000' }
+            ],
+            [
+                { rank: 1, title: '似锦', author: '冬天的柳叶', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1400万', link: 'https://www.jjwxc.net/onebook.php?novelid=3100000' },
+                { rank: 2, title: '嫡女谋', author: '面北眉南', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '1200万', link: 'https://www.jjwxc.net/onebook.php?novelid=2400000' },
+                { rank: 3, title: '闺宁', author: '意迟迟', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '1100万', link: 'https://www.jjwxc.net/onebook.php?novelid=2800000' },
+                { rank: 4, title: '嫡谋', author: '面北眉南', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '1000万', link: 'https://www.jjwxc.net/onebook.php?novelid=2200375' },
+                { rank: 5, title: '金陵春', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '950万', link: 'https://www.jjwxc.net/onebook.php?novelid=2600000' },
+                { rank: 6, title: '花开锦绣', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '900万', link: 'https://www.jjwxc.net/onebook.php?novelid=2500000' },
+                { rank: 7, title: '锦桐', author: '闲听落花', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '850万', link: 'https://www.jjwxc.net/onebook.php?novelid=2732372' },
+                { rank: 8, title: '嫡长女她又美又飒', author: '千苒君笑', type: '古言宅斗', tags: ['宅斗', '重生', '爽文'], status: '连载中', popularity: '800万', link: 'https://www.jjwxc.net/onebook.php?novelid=4350000' },
+                { rank: 9, title: '重生之温婉', author: '六月浩雪', type: '古言宅斗', tags: ['宅斗', '重生', '甜宠'], status: '已完结', popularity: '750万', link: 'https://www.jjwxc.net/onebook.php?novelid=2000000' },
+                { rank: 10, title: '继妹难为', author: '六月浩雪', type: '古言宅斗', tags: ['宅斗', '重生', '权谋'], status: '已完结', popularity: '700万', link: 'https://www.jjwxc.net/onebook.php?novelid=2100000' }
+            ]
         ];
 
+        function getDailyJjwxcRanking() {
+            return jjwxcRankingSets[getDailyIndex(jjwxcRankingSets)];
+        }
+
         function getDailyNovelTask() {
+            const ranking = getDailyJjwxcRanking();
             const today = new Date().toDateString();
             const lastDate = getStore('novel_task_date', '');
             
             if (lastDate !== today) {
                 const tasks = [
-                    '拆解《长月烬明》文案前三章',
-                    '分析《错撩》人物设定',
-                    '研究《偷偷藏不住》开篇钩子',
-                    '分析《白日梦我》节奏把控',
-                    '拆解《当我飞奔向你》情感线',
-                    '研究《折月亮》治愈系写法',
-                    '分析《神明今夜想你》救赎主题',
-                    '拆解《偏偏宠爱》重生设定'
+                    `拆解《${ranking[0].title}》文案前三章`,
+                    `分析《${ranking[1].title}》人物设定`,
+                    `研究《${ranking[2].title}》开篇钩子`,
+                    `分析《${ranking[3].title}》节奏把控`,
+                    `拆解《${ranking[4].title}》情感线`,
+                    `研究《${ranking[5].title}》写作手法`,
+                    `分析《${ranking[6].title}》主题表达`,
+                    `拆解《${ranking[7].title}》情节设计`
                 ];
                 const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
                 setStore('novel_task', randomTask);
                 setStore('novel_task_date', today);
                 return randomTask;
             }
-            return getStore('novel_task', '拆解《长月烬明》文案前三章');
+            return getStore('novel_task', `拆解《${ranking[0].title}》文案前三章`);
         }
 
         function getNovelNotes() {
@@ -1399,7 +1537,7 @@
                         <a href="https://www.jjwxc.net/ranklist/top100.html" target="_blank" class="btn btn-sm btn-jjwxc">查看官网实时榜单</a>
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
-                        ${jjwxcRanking.map(item => `
+                        ${getDailyJjwxcRanking().map(item => `
                             <div class="ranking-item" onclick="window.open('${item.link}', '_blank')">
                                 <span class="rank-badge ${item.rank === 1 ? 'gold' : item.rank === 2 ? 'silver' : item.rank === 3 ? 'bronze' : ''}">${item.rank}</span>
                                 <div class="ranking-info">
@@ -1461,7 +1599,7 @@
                                 <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">${tip.title}</h4>
                                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">${tip.content}</p>
                                 <div style="margin-top: 8px;">
-                                    <a href="https://www.jjwxc.net/find.php?kw=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-jjwxc">📖 晋江搜索</a>
+                                    <a href="https://m.jjwxc.com/search?keyword=${encodeURIComponent(tip.keyword)}" target="_blank" class="btn-platform btn-jjwxc">📖 晋江搜索</a>
                                 </div>
                             </div>
                         `).join('')}
@@ -1556,7 +1694,7 @@
                             <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${item.content}</p>
                             <div style="display: flex; gap: 8px;">
                                 <a href="https://www.douyin.com/search/${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 查看抖音</a>
-                                <a href="https://www.xiaohongshu.com/search?q=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 查看小红书</a>
+                                <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 查看小红书</a>
                             </div>
                         </div>
                     `).join('')}
@@ -1623,7 +1761,7 @@
                             <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px;">${item.feature}</p>
                             <div style="display: flex; gap: 8px;">
                                 <a href="https://www.douyin.com/search/${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-douyin">📱 抖音搜索</a>
-                                <a href="https://www.xiaohongshu.com/search?q=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
+                                <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
                             </div>
                         </div>
                     `).join('')}
@@ -1829,7 +1967,7 @@
                                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px;">${item.tip}</p>
                                 <div style="display: flex; gap: 6px;">
                                     <a href="https://www.douyin.com/search/${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-douyin" style="font-size: 11px;">📱</a>
-                                    <a href="https://www.xiaohongshu.com/search?q=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu" style="font-size: 11px;">📕</a>
+                                    <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu" style="font-size: 11px;">📕</a>
                                     <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(item.keyword)}" target="_blank" class="btn-platform btn-bilibili" style="font-size: 11px;">📺</a>
                                 </div>
                             </div>
@@ -1875,7 +2013,12 @@
             '生命在于运动',
             '每天运动一小时，健康生活一辈子',
             '运动让生活更精彩',
-            '坚持运动，遇见更好的自己'
+            '坚持运动，遇见更好的自己',
+            '运动是健康的源泉',
+            '健康体魄是幸福生活的基础',
+            '奔跑吧，向着更好的自己',
+            '运动使我快乐',
+            '自律给我自由'
         ];
 
         const sportsMotivations = [
@@ -1888,14 +2031,78 @@
             '运动让你更有活力，更有自信',
             '每一步都算数，坚持就是胜利',
             '挑战自己，超越极限',
-            '健康是一切的基础，运动是健康的基石'
+            '健康是一切的基础，运动是健康的基石',
+            '运动不是为了取悦别人，而是为了遇见更好的自己',
+            '每一天的坚持，都是在为未来的自己积蓄力量'
         ];
 
         const sportsPlan = [
-            { id: 'warmup', name: '热身运动', duration: '10分钟', icon: '🌡️' },
-            { id: 'cardio', name: '有氧运动', duration: '30分钟', icon: '❤️' },
-            { id: 'strength', name: '力量训练', duration: '20分钟', icon: '💪' },
-            { id: 'stretch', name: '拉伸放松', duration: '10分钟', icon: '🧘' }
+            { id: 'warmup', name: '热身运动', duration: '10分钟', icon: '🌡️', color: '#FF6B6B' },
+            { id: 'cardio', name: '有氧运动', duration: '30分钟', icon: '❤️', color: '#4ECDC4' },
+            { id: 'strength', name: '力量训练', duration: '20分钟', icon: '💪', color: '#45B7D1' },
+            { id: 'stretch', name: '拉伸放松', duration: '10分钟', icon: '🧘', color: '#96CEB4' }
+        ];
+
+        const sportsTypes = [
+            { 
+                name: '有氧运动', 
+                icon: '🏃', 
+                description: '提升心肺功能，燃烧卡路里',
+                benefits: ['增强心肺功能', '减肥塑形', '缓解压力', '改善睡眠'],
+                examples: ['跑步', '游泳', '跳绳', '骑行'],
+                keyword: '有氧运动'
+            },
+            { 
+                name: '力量训练', 
+                icon: '💪', 
+                description: '增强肌肉力量，塑造体型',
+                benefits: ['增加肌肉量', '提高基础代谢', '预防骨质疏松', '改善体态'],
+                examples: ['哑铃训练', '俯卧撑', '深蹲', '平板支撑'],
+                keyword: '力量训练'
+            },
+            { 
+                name: '瑜伽', 
+                icon: '🧘', 
+                description: '身心合一，平衡和谐',
+                benefits: ['提升柔韧性', '舒缓压力', '改善体态', '增强专注力'],
+                examples: ['哈他瑜伽', '流瑜伽', '阴瑜伽', '普拉提'],
+                keyword: '瑜伽'
+            },
+            { 
+                name: 'HIIT训练', 
+                icon: '⚡', 
+                description: '高强度间歇训练，高效燃脂',
+                benefits: ['短时间高效燃脂', '后燃效应持久', '提升心肺耐力', '节省时间'],
+                examples: ['冲刺跑', '开合跳', '波比跳', '高抬腿'],
+                keyword: 'HIIT训练'
+            },
+            { 
+                name: '球类运动', 
+                icon: '⚽', 
+                description: '团队协作，趣味竞技',
+                benefits: ['增强协调性', '培养团队精神', '提升反应能力', '社交互动'],
+                examples: ['篮球', '羽毛球', '乒乓球', '网球'],
+                keyword: '球类运动'
+            },
+            { 
+                name: '舞蹈健身', 
+                icon: '💃', 
+                description: '快乐运动，展现自我',
+                benefits: ['提升节奏感', '减肥塑形', '增强自信', '释放压力'],
+                examples: ['广场舞', '爵士舞', '拉丁舞', '尊巴'],
+                keyword: '舞蹈健身'
+            }
+        ];
+
+        const sportsTips = [
+            { title: '运动前后补水', content: '运动前1小时喝200-300ml水，运动中每15-20分钟补100-150ml水，运动后补充电解质', icon: '💧' },
+            { title: '循序渐进原则', content: '不要一开始就进行高强度运动，给身体适应的时间，避免受伤', icon: '📈' },
+            { title: '运动后拉伸', content: '运动后及时拉伸可以缓解肌肉酸痛，防止肌肉僵硬，提升柔韧性', icon: '🧘' },
+            { title: '合理安排休息', content: '肌肉生长在休息中进行，不要连续两天高强度训练同一部位', icon: '🛌' },
+            { title: '运动后营养', content: '运动后30-60分钟是补充营养的黄金时间，适量摄入蛋白质和碳水化合物', icon: '🥗' },
+            { title: '倾听身体声音', content: '运动中感到疼痛要立即停止，不要勉强，健康永远是第一位的', icon: '👂' },
+            { title: '保持规律运动', content: '每周运动3-5次，每次30-60分钟，比偶尔一次长时间运动效果更好', icon: '📅' },
+            { title: '运动前热身', content: '热身可以提高体温，激活肌肉，增加关节灵活性，预防运动损伤', icon: '🌡️' }
         ];
 
         function getSportsProgress() {
@@ -1958,8 +2165,9 @@
         function renderSportsPage() {
             const progress = getSportsProgress();
             const stats = getSportsStats();
-            const quote = sportsQuotes[Math.floor(Math.random() * sportsQuotes.length)];
-            const motivation = sportsMotivations[Math.floor(Math.random() * sportsMotivations.length)];
+            const quote = sportsQuotes[getDailyIndex(sportsQuotes)];
+            const motivation = sportsMotivations[getDailyIndex(sportsMotivations)];
+            const dailyTip = sportsTips[getDailyIndex(sportsTips)];
 
             document.getElementById('page-sports').innerHTML = `
                 <div class="card" style="background: linear-gradient(135deg, #f0fff5 0%, #fffcf8 100%); border: none;">
@@ -1969,6 +2177,9 @@
                     <div style="text-align: center; padding: 20px;">
                         <p style="font-size: 18px; color: var(--text-primary); font-weight: 500; margin-bottom: 8px;">"${quote}"</p>
                         <p style="font-size: 14px; color: var(--text-secondary);">— 运动名言</p>
+                    </div>
+                    <div class="highlight" style="margin: 0 20px 20px;">
+                        <p>${dailyTip.icon} <strong>${dailyTip.title}：</strong>${dailyTip.content}</p>
                     </div>
                 </div>
 
@@ -1981,58 +2192,110 @@
                         <div class="stat-value" style="color: var(--blue);">${stats.weeklyCount}</div>
                         <div class="stat-label">本周运动次数</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: var(--warning);">${Math.round((stats.weeklyCount / 7) * 100)}%</div>
+                        <div class="stat-label">本周完成率</div>
+                    </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">📅 今日运动计划</h3>
                     </div>
-                    ${sportsPlan.map(item => `
-                        <div style="margin-bottom: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <span style="font-size: 20px;">${item.icon}</span>
-                                    <span style="font-weight: 500; color: var(--text-primary);">${item.name}</span>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        ${sportsPlan.map(item => `
+                            <div style="padding: 16px; background: rgba(72,168,72,0.05); border-radius: 12px; border-left: 4px solid ${item.color};">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-size: 24px;">${item.icon}</span>
+                                        <div>
+                                            <div style="font-weight: 600; color: var(--text-primary);">${item.name}</div>
+                                            <div style="font-size: 12px; color: var(--text-muted);">${item.duration}</div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-sm btn-primary" onclick="updateSportsProgress('${item.id}')" style="background: ${item.color}; border-color: ${item.color};">打卡</button>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <span style="font-size: 13px; color: var(--text-muted);">${item.duration}</span>
-                                    <button class="btn btn-sm btn-primary" onclick="updateSportsProgress('${item.id}')">打卡</button>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${progress[item.id]}%; background: ${item.color};"></div>
+                                </div>
+                                <div style="text-align: right; margin-top: 4px;">
+                                    <span style="font-size: 12px; color: var(--text-muted);">${progress[item.id]}%</span>
                                 </div>
                             </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill ${item.id === 'warmup' ? 'pink' : item.id === 'cardio' ? 'blue' : item.id === 'strength' ? 'purple' : 'green'}" style="width: ${progress[item.id]}%"></div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">🎬 家庭运动视频</h3>
-                    </div>
-                    <div class="video-container">
-                        <video controls playsinline>
-                            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                            <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">
-                            您的浏览器不支持视频播放
-                        </video>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div style="display: flex; gap: 8px;">
-                            <a href="https://www.douyin.com/search/${encodeURIComponent('居家健身')}" target="_blank" class="btn-platform btn-douyin">📱 抖音搜索</a>
-                            <a href="https://www.xiaohongshu.com/search?q=${encodeURIComponent('居家健身')}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
-                        </div>
-                        <button class="btn btn-sm btn-secondary" onclick="showVideoSummary()">视频总结</button>
+                        `).join('')}
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">📝 家庭运动步骤</h3>
+                        <h3 class="card-title">🎬 运动教学视频</h3>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div>
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">1. 热身运动</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                        <div style="position: relative; padding-bottom: 56.25%; border-radius: 12px; overflow: hidden; background: #000;">
+                            <iframe src="https://player.bilibili.com/player.html?aid=713585352&bvid=BV14y4y1t7Mq&cid=206047729&page=1&high_quality=1" 
+                                style="position: absolute; width: 100%; height: 100%;" 
+                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+                            </iframe>
+                        </div>
+                        <div style="position: relative; padding-bottom: 56.25%; border-radius: 12px; overflow: hidden; background: #000;">
+                            <iframe src="https://player.bilibili.com/player.html?aid=713585352&bvid=BV14y4y1t7Mq&cid=206047729&page=1&high_quality=1" 
+                                style="position: absolute; width: 100%; height: 100%;" 
+                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+                            </iframe>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 12px; margin-top: 16px;">
+                        <a href="https://www.douyin.com/search/${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-douyin">📱 抖音搜索</a>
+                        <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-xiaohongshu">📕 小红书搜索</a>
+                        <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent('居家健身教学')}" target="_blank" class="btn-platform btn-bilibili">📺 B站搜索</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🏋️ 运动类型百科</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 16px;">
+                        ${sportsTypes.map(type => `
+                            <div class="card" style="padding: 20px; border: 1px solid rgba(72,168,72,0.2);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span style="font-size: 28px;">${type.icon}</span>
+                                        <div>
+                                            <h4 style="font-size: 15px; font-weight: 600; color: var(--text-primary);">${type.name}</h4>
+                                            <p style="font-size: 13px; color: var(--text-muted);">${type.description}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <div style="font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px;">✅ 主要益处</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                        ${type.benefits.map(b => `<span class="tag priority-low">${b}</span>`).join('')}
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 16px;">
+                                    <div style="font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px;">🎯 常见项目</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                        ${type.examples.map(e => `<span class="tag">${e}</span>`).join('')}
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <a href="https://www.douyin.com/search/${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-douyin" style="font-size: 11px;">📱</a>
+                                    <a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-xiaohongshu" style="font-size: 11px;">📕</a>
+                                    <a href="https://search.bilibili.com/all?keyword=${encodeURIComponent(type.keyword)}" target="_blank" class="btn-platform btn-bilibili" style="font-size: 11px;">📺</a>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📝 家庭运动步骤详解</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        <div style="padding: 20px; background: rgba(255,107,107,0.05); border-radius: 12px; border-left: 4px solid #FF6B6B;">
+                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🌡️ 热身运动</h4>
                             <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
                                 <li>颈部绕环：顺时针和逆时针各5圈</li>
                                 <li>肩部绕环：向前和向后各5圈</li>
@@ -2041,8 +2304,8 @@
                                 <li>脚踝绕环：顺时针和逆时针各5圈</li>
                             </ul>
                         </div>
-                        <div>
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">2. 有氧运动</h4>
+                        <div style="padding: 20px; background: rgba(78,205,196,0.05); border-radius: 12px; border-left: 4px solid #4ECDC4;">
+                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">❤️ 有氧运动</h4>
                             <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
                                 <li>原地慢跑：3分钟</li>
                                 <li>开合跳：30次</li>
@@ -2051,8 +2314,8 @@
                                 <li>平板支撑：30秒</li>
                             </ul>
                         </div>
-                        <div>
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">3. 力量训练</h4>
+                        <div style="padding: 20px; background: rgba(69,183,209,0.05); border-radius: 12px; border-left: 4px solid #45B7D1;">
+                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">💪 力量训练</h4>
                             <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
                                 <li>俯卧撑：15次（女生可做跪姿）</li>
                                 <li>仰卧起坐：20次</li>
@@ -2061,8 +2324,8 @@
                                 <li>侧卧抬腿：每侧10次</li>
                             </ul>
                         </div>
-                        <div>
-                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">4. 拉伸放松</h4>
+                        <div style="padding: 20px; background: rgba(150,206,180,0.05); border-radius: 12px; border-left: 4px solid #96CEB4;">
+                            <h4 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">🧘 拉伸放松</h4>
                             <ul style="font-size: 14px; color: var(--text-secondary); line-height: 1.8; padding-left: 20px;">
                                 <li>颈部拉伸：左右各30秒</li>
                                 <li>肩部拉伸：左右各30秒</li>
@@ -2074,7 +2337,24 @@
                     </div>
                 </div>
 
-                <div class="card" style="background: rgba(72,168,72,0.05);">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💡 运动小贴士</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+                        ${sportsTips.map(tip => `
+                            <div style="padding: 14px; background: rgba(72,168,72,0.05); border-radius: 8px; display: flex; gap: 10px;">
+                                <span style="font-size: 18px;">${tip.icon}</span>
+                                <div>
+                                    <div style="font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px;">${tip.title}</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">${tip.content}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="card" style="background: linear-gradient(135deg, rgba(72,168,72,0.1) 0%, rgba(78,205,196,0.1) 100%);">
                     <div style="text-align: center; padding: 20px;">
                         <p style="font-size: 16px; color: var(--success); font-weight: 500;">💪 ${motivation}</p>
                     </div>
@@ -2100,6 +2380,32 @@
             { name: '正楷', sample: '永字八法：点、横、竖、撇、捺、折、钩、提。正楷字体端庄稳重，笔画清晰有力，适合初学者。', keyword: '正楷字帖' },
             { name: '行楷', sample: '行楷介于楷书和行书之间，笔画流畅自然，既有楷书的工整，又有行书的灵动。书写时注意笔画的连贯和呼应。', keyword: '行楷字帖' },
             { name: '隶书', sample: '隶书是汉字书法中重要的字体之一，笔画蚕头燕尾，古朴典雅。书写时注意横画的波磔和结构的扁平。', keyword: '隶书字帖' }
+        ];
+
+        const calligraphyQuotes = [
+            '字如其人，立品为先',
+            '笔落惊风雨，诗成泣鬼神',
+            '书贵瘦硬方通神',
+            '心正则笔正',
+            '笔墨当随时代',
+            '学书在法，其妙在人',
+            '工欲善其事，必先利其器',
+            '熟能生巧，巧能生精',
+            '书到用时方恨少',
+            '宝剑锋从磨砺出，梅花香自苦寒来'
+        ];
+
+        const calligraphyTips = [
+            '练习书法时保持正确坐姿，腰杆挺直，双脚平放',
+            '握笔要松紧适度，太紧会僵硬，太松会无力',
+            '先摹后临，先慢后快，循序渐进',
+            '注意笔画的起笔、行笔和收笔，细节决定成败',
+            '每天坚持练习30分钟，胜过三天打鱼两天晒网',
+            '选择适合自己的字帖，不要盲目跟风',
+            '写完后对照字帖仔细检查，找出不足之处',
+            '书法讲究气韵生动，不仅要形似，更要神似',
+            '保持心情舒畅，心浮气躁写不好字',
+            '遇到困难不要放弃，坚持就是胜利'
         ];
 
         function printCalligraphy(fontName) {
@@ -2135,10 +2441,20 @@
         }
 
         function renderCalligraphyPage() {
+            const dailyQuote = calligraphyQuotes[getDailyIndex(calligraphyQuotes)];
+            const dailyTip = calligraphyTips[getDailyIndex(calligraphyTips)];
+
             document.getElementById('page-calligraphy').innerHTML = `
                 <div class="card" style="background: linear-gradient(135deg, #fffef0 0%, #fffcf8 100%); border: none;">
                     <div class="card-header">
                         <h2 class="card-title" style="font-size: 22px;">✍️ 练字字帖</h2>
+                    </div>
+                    <div style="text-align: center; padding: 20px;">
+                        <p style="font-size: 16px; color: var(--text-primary); font-weight: 500; margin-bottom: 8px;">"${dailyQuote}"</p>
+                        <p style="font-size: 14px; color: var(--text-secondary);">— 书法名言</p>
+                    </div>
+                    <div class="highlight" style="margin: 0 20px 20px;">
+                        <p>💡 <strong>今日练习建议：</strong>${dailyTip}</p>
                     </div>
                 </div>
 
@@ -2255,6 +2571,7 @@
         // ==================== 初始化 ====================
         function init() {
             initMenu();
+            document.getElementById('last-refresh-time').textContent = '上次刷新：' + getLastRefreshTime();
             renderTodoPage();
             renderTeachingPage();
             renderNovelPage();
